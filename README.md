@@ -9,3 +9,5 @@ Gli utenti possono esplorare la vasta gamma di giochi disponibili attraverso una
 Inoltre, la piattaforma integra API appositamente create per garantire informazioni sempre aggiornate e dettagliate sui titoli presenti nella collezione degli utenti. Una dashboard di amministrazione permette agli amministratori di gestire utenti, recensioni e giochi, garantendo un ambiente sicuro e coinvolgente per tutti gli appassionati di videogiochi.
 
 Questa piattaforma offre un'esperienza completa per gli amanti dei videogiochi, unendo la gestione della collezione, la condivisione di esperienze e la scoperta di nuovi titoli in un'unica e coinvolgente applicazione web.
+
+Aggiungere documentazione swagger.
