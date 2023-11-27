@@ -25,7 +25,12 @@ public class Game {
     private String description;
     private List<String> gameImages;
     private String gameCover;
+    @ElementCollection(targetClass = GameGenre.class)
+    @CollectionTable(name = "game_genres", joinColumns = @JoinColumn(name = "game_id"))
+    @Enumerated(EnumType.STRING)
     private List<GameGenre> genre;
+    @ElementCollection(targetClass = Platform.class)
+    @CollectionTable(name = "game_platforms", joinColumns = @JoinColumn(name = "game_id"))
     @Enumerated(EnumType.STRING)
     private List<Platform> platforms;
     private LocalDate releaseDate;

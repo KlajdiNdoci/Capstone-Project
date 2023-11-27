@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 @Entity
 @Table(name = "comments")
@@ -21,9 +21,10 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    @OneToMany(mappedBy = "comment")
-    private Review review;
+    @ManyToOne
+    @JoinColumn(name = "news_id")
+    private News news;
     @CreationTimestamp
-    @Temporal(TemporalType.DATE)
-    protected LocalDate createdAt;
+    @Temporal(TemporalType.TIMESTAMP)
+    protected LocalDateTime createdAt;
 }

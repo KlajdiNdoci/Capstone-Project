@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -24,9 +25,11 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "game_id")
     private Game game;
-    private String comment;
+    private String content;
     private double rating;
+    private long likes;
+    private long dislikes;
     @CreationTimestamp
-    @Temporal(TemporalType.DATE)
-    protected LocalDate createdAt;
+    @Temporal(TemporalType.TIMESTAMP)
+    protected LocalDateTime createdAt;
 }

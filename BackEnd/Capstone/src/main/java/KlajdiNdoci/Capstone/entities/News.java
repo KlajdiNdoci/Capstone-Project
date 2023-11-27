@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 @Entity
@@ -25,8 +26,8 @@ public class News {
     @JoinColumn(name= "comment_id")
     private List<Comment> comments;
     @CreationTimestamp
-    @Temporal(TemporalType.DATE)
-    protected LocalDate createdAt;
+    @Temporal(TemporalType.TIMESTAMP)
+    protected LocalDateTime createdAt;
     @OneToMany(mappedBy = "news")
     private Game game;
 }
