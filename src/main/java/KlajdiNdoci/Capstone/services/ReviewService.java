@@ -1,7 +1,9 @@
 package KlajdiNdoci.Capstone.services;
 
+import KlajdiNdoci.Capstone.entities.Comment;
 import KlajdiNdoci.Capstone.entities.Review;
 import KlajdiNdoci.Capstone.exceptions.NotFoundException;
+import KlajdiNdoci.Capstone.payloads.NewNewsDTO;
 import KlajdiNdoci.Capstone.payloads.NewReviewDTO;
 import KlajdiNdoci.Capstone.repositories.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,14 +44,10 @@ public class ReviewService {
         return reviewRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
-    public Review findByIdAndUpdate(UUID userId,NewReviewDTO body) {
-        Review newReview =Review.builder()
-                .content(body.content())
-                .user(userService.findUserById(userId))
-                .game(gameService.findById(body.gameId()))
-                .rating(body.rating())
-                .build();
-        return reviewRepository.save(newReview);
+    public Review findByIdAndUpdate(NewReviewDTO body, UUID reviewId) {
+        Review foundReview = this.findById(reviewId);
+        foundReview.setContent(body.content());
+        return reviewRepository.save(foundReview);
     }
 
     public void findByIdAndDelete(UUID id) {

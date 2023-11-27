@@ -21,6 +21,10 @@ public class News {
     private String title;
     private String image;
 
+    @ManyToOne
+    @JoinColumn(name = "creator_id")
+    private User creator;
+
     @Column(columnDefinition="TEXT")
     private String content;
 
