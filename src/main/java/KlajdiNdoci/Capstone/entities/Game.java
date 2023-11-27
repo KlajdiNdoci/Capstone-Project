@@ -17,14 +17,17 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Game {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String title;
     private String trailer;
-    private String description;
     private String gameCover;
     private LocalDate releaseDate;
+
+    @Column(columnDefinition="TEXT")
+    private String description;
 
     @ElementCollection
     @CollectionTable(name = "game_images", joinColumns = @JoinColumn(name = "game_id"))

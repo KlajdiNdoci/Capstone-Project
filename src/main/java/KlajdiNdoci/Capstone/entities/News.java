@@ -16,18 +16,19 @@ import java.util.UUID;
 @AllArgsConstructor
 public class News {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String title;
-    private String content;
     private String image;
+
+    @Column(columnDefinition="TEXT")
+    private String content;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     protected LocalDateTime createdAt;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name= "comment_id")
+    @OneToMany(mappedBy = "news")
     private List<Comment> comments;
 
     @ManyToOne
