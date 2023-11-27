@@ -23,24 +23,41 @@ public class Game {
     private String title;
     private String trailer;
     private String description;
-    private List<String> gameImages;
     private String gameCover;
+    private LocalDate releaseDate;
+
+    @ElementCollection
+    @CollectionTable(name = "game_images", joinColumns = @JoinColumn(name = "game_id"))
+    @Column(name = "image_path")
+    private List<String> gameImages;
+
     @ElementCollection(targetClass = GameGenre.class)
     @CollectionTable(name = "game_genres", joinColumns = @JoinColumn(name = "game_id"))
     @Enumerated(EnumType.STRING)
-    private List<GameGenre> genre;
+    private List<GameGenre> genres;
+
     @ElementCollection(targetClass = Platform.class)
     @CollectionTable(name = "game_platforms", joinColumns = @JoinColumn(name = "game_id"))
     @Enumerated(EnumType.STRING)
     private List<Platform> platforms;
-    private LocalDate releaseDate;
+
     @JsonIgnore
-    @OneToMany(mappedBy = "game")
+    @OneToMany(mappedBy = "game", cascade = CascadeType.REMOVE)
     private List<Review> reviews;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-    @ManyToOne
-    @JoinColumn(name = "news_id")
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_saved_games",
+            joinColumns = @JoinColumn(name = "game_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> users;
+
+    @ManyToMany
+    @JoinTable(
+            name = "game_news",
+            joinColumns = @JoinColumn(name = "game_id"),
+            inverseJoinColumns = @JoinColumn(name = "news_id")
+    )
     private List<News> news;
 }

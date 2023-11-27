@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -22,12 +21,24 @@ public class News {
     private String title;
     private String content;
     private String image;
-    @ManyToOne
-    @JoinColumn(name= "comment_id")
-    private List<Comment> comments;
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     protected LocalDateTime createdAt;
-    @OneToMany(mappedBy = "news")
+
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name= "comment_id")
+    private List<Comment> comments;
+
+    @ManyToOne
+    @JoinColumn(name = "game_id")
     private Game game;
+
+    @ManyToMany
+    @JoinTable(
+            name = "news_likes",
+            joinColumns = @JoinColumn(name = "news_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> likes;
 }

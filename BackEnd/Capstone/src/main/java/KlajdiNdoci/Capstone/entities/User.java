@@ -32,17 +32,27 @@ public class User implements UserDetails {
     private String email;
     private String password;
     private String avatar;
+
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
     @JsonIgnore
-    @OneToMany(mappedBy = "user")
-    private List<Game> games;
+    @ManyToMany
+    @JoinTable(
+            name = "user_saved_games",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "game_id")
+    )
+    private List<Game> savedGames;
+
     @JsonIgnore
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Review> reviews;
+
     @JsonIgnore
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(
