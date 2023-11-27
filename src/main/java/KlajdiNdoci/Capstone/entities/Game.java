@@ -25,6 +25,7 @@ public class Game {
     private String trailer;
     private String gameCover;
     private LocalDate releaseDate;
+    private double averageRating;
 
     @Column(columnDefinition="TEXT")
     private String description;
@@ -63,4 +64,18 @@ public class Game {
             inverseJoinColumns = @JoinColumn(name = "news_id")
     )
     private List<News> news;
+
+    public void calculateAverageRating() {
+        if (reviews != null && !reviews.isEmpty()) {
+            double totalRating = 0;
+            int numReviews = reviews.size();
+
+            for (Review review : reviews) {
+                totalRating += review.getRating();
+            }
+            averageRating = totalRating / numReviews;
+        } else {
+            averageRating = 0.0;
+        }
+    }
 }

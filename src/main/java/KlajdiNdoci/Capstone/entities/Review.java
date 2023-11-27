@@ -20,8 +20,10 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private String content;
     private double rating;
+
+    @Column(columnDefinition="TEXT")
+    private String content;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

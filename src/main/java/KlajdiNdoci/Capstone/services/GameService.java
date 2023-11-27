@@ -37,6 +37,7 @@ public class GameService {
         newGame.setGameCover("https://tritonsubs.com/wp-content/uploads/2020/07/Placeholder-16x9-1.jpg");
         newGame.setDescription(body.description());
         newGame.setTitle(body.title());
+
         List<GameGenre> genres = new ArrayList<>();
         for (String genreName : body.genres()) {
             GameGenre genre = GameGenre.valueOf(genreName.toUpperCase());
@@ -54,6 +55,8 @@ public class GameService {
 
     public Page<Game> getGames(int page, int size, String orderBy) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
+        Page<Game> gamesPage = gameRepository.findAll(pageable);
+        gamesPage.getContent().forEach(Game::calculateAverageRating);
         return gameRepository.findAll(pageable);
     }
 
@@ -86,5 +89,28 @@ public class GameService {
         found.setTrailer(url);
         gameRepository.save(found);
         return found;
+    }
+
+    public Game findByIdAndUpdate(UUID id, NewGameDTO updatedGameDTO) {
+        Game found = gameRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+
+        found.setTitle(updatedGameDTO.title());
+        found.setDescription(updatedGameDTO.description());
+
+        List<GameGenre> updatedGenres = new ArrayList<>();
+        for (String genreName : updatedGameDTO.genres()) {
+            GameGenre genre = GameGenre.valueOf(genreName.toUpperCase());
+            updatedGenres.add(genre);
+        }
+        found.setGenres(updatedGenres);
+
+        List<Platform> updatedPlatforms = new ArrayList<>();
+        for (String platformName : updatedGameDTO.platforms()) {
+            Platform platform = Platform.valueOf(platformName.toUpperCase());
+            updatedPlatforms.add(platform);
+        }
+        found.setPlatforms(updatedPlatforms);
+
+        return gameRepository.save(found);
     }
 }
