@@ -67,6 +67,18 @@ public class GameService {
 
     public void findByIdAndDelete(UUID id) {
         Game found = gameRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+        if (found.getTrailer() != null) {
+            cloudinaryService.deleteImageByUrl(found.getTrailer());
+        }
+        if (!found.getGameCover().equals("https://tritonsubs.com/wp-content/uploads/2020/07/Placeholder-16x9-1.jpg")) {
+            cloudinaryService.deleteImageByUrl(found.getGameCover());
+        }
+        if (!found.getGameImages().isEmpty()) {
+            for (String gameImage: found.getGameImages()) {
+                cloudinaryService.deleteImageByUrl(gameImage);
+            }
+            cloudinaryService.deleteImageByUrl(found.getTrailer());
+        }
         gameRepository.delete(found);
     }
 
