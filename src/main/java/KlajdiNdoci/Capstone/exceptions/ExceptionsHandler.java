@@ -59,9 +59,15 @@ public class ExceptionsHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorsResponseDTO handleNotFound(HttpMessageNotReadableException e) {
-        if (e.getMessage().equals("Required request body is missing: public EPIC_ENERGY_SERVICE.BEBuildWeek2.entities.Utente EPIC_ENERGY_SERVICE.BEBuildWeek2.controllers.AuthController.saveUser(EPIC_ENERGY_SERVICE.BEBuildWeek2.payloads.NewUserDTO,org.springframework.validation.BindingResult)")) {
-            return new ErrorsResponseDTO("Seleziona il formato corretto del body", new Date());
+        if (e.getMessage().equals("Required request body is missing: public KlajdiNdoci.Capstone.entities.Game KlajdiNdoci.Capstone.controllers.GameController.createGame(KlajdiNdoci.Capstone.payloads.NewGameDTO,org.springframework.validation.BindingResult)")) {
+            return new ErrorsResponseDTO("You have to enter something in the body!", new Date());
         }
+        return new ErrorsResponseDTO(e.getMessage(), new Date());
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorsResponseDTO handleIllegalArgument(IllegalArgumentException e) {
         return new ErrorsResponseDTO(e.getMessage(), new Date());
     }
 }

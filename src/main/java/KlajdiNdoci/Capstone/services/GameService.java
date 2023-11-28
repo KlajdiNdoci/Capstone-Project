@@ -37,6 +37,7 @@ public class GameService {
         newGame.setGameCover("https://tritonsubs.com/wp-content/uploads/2020/07/Placeholder-16x9-1.jpg");
         newGame.setDescription(body.description());
         newGame.setTitle(body.title());
+        newGame.setReleaseDate(body.releaseDate());
 
         List<GameGenre> genres = new ArrayList<>();
         for (String genreName : body.genres()) {
@@ -91,21 +92,22 @@ public class GameService {
         return found;
     }
 
-    public Game findByIdAndUpdate(UUID id, NewGameDTO updatedGameDTO) {
+    public Game findByIdAndUpdate(UUID id, NewGameDTO body) {
         Game found = gameRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
 
-        found.setTitle(updatedGameDTO.title());
-        found.setDescription(updatedGameDTO.description());
+        found.setTitle(body.title());
+        found.setDescription(body.description());
+        found.setReleaseDate(body.releaseDate());
 
         List<GameGenre> updatedGenres = new ArrayList<>();
-        for (String genreName : updatedGameDTO.genres()) {
+        for (String genreName : body.genres()) {
             GameGenre genre = GameGenre.valueOf(genreName.toUpperCase());
             updatedGenres.add(genre);
         }
         found.setGenres(updatedGenres);
 
         List<Platform> updatedPlatforms = new ArrayList<>();
-        for (String platformName : updatedGameDTO.platforms()) {
+        for (String platformName : body.platforms()) {
             Platform platform = Platform.valueOf(platformName.toUpperCase());
             updatedPlatforms.add(platform);
         }

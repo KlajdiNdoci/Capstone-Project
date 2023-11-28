@@ -1,8 +1,10 @@
 package KlajdiNdoci.Capstone.payloads;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public record NewGameDTO (
@@ -14,6 +16,8 @@ public record NewGameDTO (
         @NotEmpty(message = "The field genres cannot be empty!")
         List<String> genres,
         @NotEmpty(message = "The field platforms cannot be empty!")
-        List<String> platforms
+        List<String> platforms,
+        @NotNull(message = "The field releaseDate cannot be null!")
+        LocalDate releaseDate
 ){
 }

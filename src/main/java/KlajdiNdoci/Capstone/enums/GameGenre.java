@@ -6,5 +6,17 @@ public enum GameGenre {
     STRATEGIC,
     ADVENTURE,
     SIMULATION,
-    RACING
+    FPS,
+    RACING,
+    ARCADE,
+    FIGHTING,
+    PLATFORM,
+    TPS,
+    PUZZLE,
+    ROGUELIKE,
+    DATING,
+    SPACE,
+    TOWERDEFENSE,
+    CARDGAME,
+    SPORT
 }
