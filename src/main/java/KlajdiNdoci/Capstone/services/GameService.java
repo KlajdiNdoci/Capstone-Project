@@ -113,4 +113,15 @@ public class GameService {
 
         return gameRepository.save(found);
     }
+
+    public Game uploadImages(MultipartFile[] images, UUID gameId) throws IOException {
+        Game game = gameRepository.findById(gameId).orElseThrow(() -> new NotFoundException(gameId));
+
+        for (MultipartFile image : images) {
+            String imageUrl = (String) cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap()).get("url");
+            game.getGameImages().add(imageUrl);
+        }
+
+        return gameRepository.save(game);
+    }
 }

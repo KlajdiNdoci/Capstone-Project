@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/USER")
+@RequestMapping("/users")
 public class UserController {
     @Autowired
     private UserService userService;
