@@ -50,6 +50,7 @@ public class Game {
     @OneToMany(mappedBy = "game", cascade = CascadeType.REMOVE)
     private List<Review> reviews;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "user_saved_games",
@@ -58,6 +59,7 @@ public class Game {
     )
     private List<User> users;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "game_news",

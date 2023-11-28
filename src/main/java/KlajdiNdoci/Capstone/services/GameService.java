@@ -84,10 +84,10 @@ public class GameService {
     public Game uploadCover(MultipartFile file, UUID id) throws IOException {
         Game found = gameRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
         String url = (String) cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
-        if (found.getTrailer() != null) {
-            cloudinaryService.deleteImageByUrl(found.getTrailer());
+        if (!found.getGameCover().equals("https://tritonsubs.com/wp-content/uploads/2020/07/Placeholder-16x9-1.jpg")) {
+            cloudinaryService.deleteImageByUrl(found.getGameCover());
         }
-        found.setTrailer(url);
+        found.setGameCover(url);
         gameRepository.save(found);
         return found;
     }
