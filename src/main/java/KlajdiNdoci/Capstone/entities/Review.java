@@ -19,6 +19,7 @@ import java.util.UUID;
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Setter(AccessLevel.NONE)
     private UUID id;
     private double rating;
 

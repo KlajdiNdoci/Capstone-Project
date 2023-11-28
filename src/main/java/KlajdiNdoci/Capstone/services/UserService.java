@@ -45,7 +45,6 @@ public class UserService {
 
     public User findByIdAndUpdate(UUID id, NewUserDTO u) throws NotFoundException {
         User foundUser = this.findUserById(id);
-        foundUser.setId(id);
         foundUser.setUsername(u.username());
         foundUser.setName(u.name());
         foundUser.setSurname(u.surname());

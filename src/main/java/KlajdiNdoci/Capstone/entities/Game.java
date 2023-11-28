@@ -20,6 +20,7 @@ public class Game {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Setter(AccessLevel.NONE)
     private UUID id;
     private String title;
     private String trailer;

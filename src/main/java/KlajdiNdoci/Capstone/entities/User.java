@@ -25,6 +25,7 @@ import java.util.UUID;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Setter(AccessLevel.NONE)
     private UUID id;
     private String name;
     private String surname;

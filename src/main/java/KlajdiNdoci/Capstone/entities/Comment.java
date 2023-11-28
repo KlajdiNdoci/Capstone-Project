@@ -18,6 +18,7 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Setter(AccessLevel.NONE)
     private UUID id;
 
     @Column(columnDefinition="TEXT")

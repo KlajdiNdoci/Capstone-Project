@@ -17,6 +17,7 @@ import java.util.UUID;
 public class News {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Setter(AccessLevel.NONE)
     private UUID id;
     private String title;
     private String image;
