@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/games/reviews")
+@RequestMapping("/reviews")
 public class ReviewController {
     @Autowired
     private ReviewService reviewService;
@@ -74,5 +74,12 @@ public class ReviewController {
         } else {
             throw new UnauthorizedException("Access Denied");
         }
+    }
+    @GetMapping("/game/{gameId}")
+    public Page<Review> getReviewsByGameId(@PathVariable UUID gameId,
+            @RequestParam(defaultValue = "0") int page,
+                                   @RequestParam(defaultValue = "10") int size,
+                                   @RequestParam(defaultValue = "id") String orderBy) {
+        return reviewService.findReviewsByGameId(page, size > 20 ? 5 : size, gameId, orderBy);
     }
 }

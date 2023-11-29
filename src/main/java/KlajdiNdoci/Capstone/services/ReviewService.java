@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Service
@@ -64,6 +65,11 @@ public class ReviewService {
         UUID gameId = found.getGame().getId();
         reviewRepository.delete(found);
         gameService.updateGameAverageRating(gameId);
+    }
+
+    public Page<Review> findReviewsByGameId(int page, int size,UUID id, String order) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(order));
+        return reviewRepository.findByGameId( id, pageable);
     }
 
 }
