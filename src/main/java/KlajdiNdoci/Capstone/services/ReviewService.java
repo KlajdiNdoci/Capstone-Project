@@ -67,9 +67,9 @@ public class ReviewService {
         gameService.updateGameAverageRating(gameId);
     }
 
-    public Page<Review> findReviewsByGameId(int page, int size,UUID id, String order) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(order));
-        return reviewRepository.findByGameId( id, pageable);
+    public Page<Review> findReviewsByGameId(int page, int size, UUID id, String order, String direction) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), order));
+        return reviewRepository.findByGameId(id, pageable);
     }
 
 }
