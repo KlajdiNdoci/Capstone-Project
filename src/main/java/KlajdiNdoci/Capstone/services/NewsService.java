@@ -24,10 +24,11 @@ public class NewsService {
     private GameService gameService;
 
 
-    public News save(UUID userId, NewNewsDTO body) {
+    public News save( NewNewsDTO body, UUID userId) {
         Game foundGame = gameService.findById(body.gameId());
         News newNews =News.builder()
                 .content(body.content())
+                .title(body.title())
                 .creator(userService.findUserById(userId))
                 .game(foundGame)
                 .image(foundGame.getGameCover())

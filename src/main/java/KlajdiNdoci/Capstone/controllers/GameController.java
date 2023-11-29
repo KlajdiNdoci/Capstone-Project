@@ -1,12 +1,8 @@
 package KlajdiNdoci.Capstone.controllers;
 
 import KlajdiNdoci.Capstone.entities.Game;
-import KlajdiNdoci.Capstone.entities.User;
-import KlajdiNdoci.Capstone.enums.GameGenre;
-import KlajdiNdoci.Capstone.enums.Platform;
 import KlajdiNdoci.Capstone.exceptions.BadRequestException;
 import KlajdiNdoci.Capstone.payloads.NewGameDTO;
-import KlajdiNdoci.Capstone.payloads.NewUserDTO;
 import KlajdiNdoci.Capstone.repositories.GameRepository;
 import KlajdiNdoci.Capstone.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/games")
@@ -40,7 +33,7 @@ public class GameController {
         return gameService.getGames(page, size > 20 ? 5 : size, orderBy);
     }
 
-    @PostMapping()
+    @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('ADMIN')")
     public Game createGame(@RequestBody @Validated NewGameDTO body, BindingResult validation) {
