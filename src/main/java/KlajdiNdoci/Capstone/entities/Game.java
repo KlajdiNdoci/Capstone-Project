@@ -60,12 +60,7 @@ public class Game {
     private List<User> users;
 
     @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-            name = "game_news",
-            joinColumns = @JoinColumn(name = "game_id"),
-            inverseJoinColumns = @JoinColumn(name = "news_id")
-    )
+    @OneToMany(mappedBy = "game", cascade = CascadeType.REMOVE)
     private List<News> news;
 
     public void calculateAverageRating() {
