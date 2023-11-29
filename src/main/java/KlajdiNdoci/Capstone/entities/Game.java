@@ -77,6 +77,8 @@ public class Game {
                 totalRating += review.getRating();
             }
             averageRating = totalRating / numReviews;
+            averageRating = Math.round(averageRating * 10);
+            averageRating = averageRating/10;
         } else {
             averageRating = 0.0;
         }

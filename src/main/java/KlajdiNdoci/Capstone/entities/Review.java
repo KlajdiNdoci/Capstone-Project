@@ -22,6 +22,7 @@ public class Review {
     @Setter(AccessLevel.NONE)
     private UUID id;
     private double rating;
+    private String title;
 
     @Column(columnDefinition="TEXT")
     private String content;

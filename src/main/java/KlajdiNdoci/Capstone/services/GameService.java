@@ -138,4 +138,10 @@ public class GameService {
 
         return gameRepository.save(game);
     }
+
+    public void updateGameAverageRating(UUID gameId) {
+        Game game = findById(gameId);
+        game.calculateAverageRating();
+        gameRepository.save(game);
+    }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 
 public record NewGameDTO (
         @NotEmpty(message = "The field title cannot be empty!")
-        @Size(min = 3, message = "The title must have at least 3 characters!")
+        @Size(min = 3,max = 30, message = "The title must be between 3 and 30 characters!")
         String title,
         @NotEmpty(message = "The field description cannot be empty!")
         String description,

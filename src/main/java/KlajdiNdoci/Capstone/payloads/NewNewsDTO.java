@@ -11,7 +11,7 @@ public record NewNewsDTO (
         @Size(min = 3, message = "The content must have at least 3 characters!")
         String content,
         @NotEmpty(message = "The field title cannot be empty!")
-        @Size(min = 3, message = "The title must have at least 3 characters!")
+        @Size(min = 3,max = 30, message = "The title must be between 3 and 30 characters!")
         String title,
         @NotNull(message = "The field gameId cannot be null!")
         UUID gameId
