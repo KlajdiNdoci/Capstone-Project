@@ -1,6 +1,8 @@
 package KlajdiNdoci.Capstone.controllers;
 
 import KlajdiNdoci.Capstone.entities.Game;
+import KlajdiNdoci.Capstone.entities.Review;
+import KlajdiNdoci.Capstone.enums.Platform;
 import KlajdiNdoci.Capstone.exceptions.BadRequestException;
 import KlajdiNdoci.Capstone.payloads.NewGameDTO;
 import KlajdiNdoci.Capstone.repositories.GameRepository;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -29,8 +32,12 @@ public class GameController {
     @GetMapping("")
     public Page<Game> getGames(@RequestParam(defaultValue = "0") int page,
                                @RequestParam(defaultValue = "10") int size,
-                               @RequestParam(defaultValue = "id") String orderBy) {
-        return gameService.getGames(page, size > 20 ? 5 : size, orderBy);
+                               @RequestParam(defaultValue = "createdAt") String orderBy,
+                               @RequestParam(defaultValue = "desc")String direction) {
+        if (!direction.equalsIgnoreCase("desc") && !direction.equalsIgnoreCase("asc")) {
+            throw new IllegalArgumentException("The direction has to be 'asc' or 'desc'!");
+        }
+        return gameService.getGames(page, size > 20 ? 5 : size, orderBy, direction);
     }
 
     @PostMapping("")
@@ -97,5 +104,17 @@ public class GameController {
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
         }
+    }
+
+    @GetMapping("/platforms")
+    public Page<Game> getGamesByPlatforms(@RequestBody List<String> platforms,
+                                            @RequestParam(defaultValue = "0") int page,
+                                            @RequestParam(defaultValue = "10") int size,
+                                            @RequestParam(defaultValue = "rating") String orderBy,
+                                            @RequestParam(defaultValue = "desc") String direction) {
+        if (!direction.equalsIgnoreCase("desc") && !direction.equalsIgnoreCase("asc")) {
+            throw new IllegalArgumentException("The direction has to be 'asc' or 'desc'!");
+        }
+        return gameService.findGamesByPlatforms(page, size > 20 ? 5 : size, platforms, orderBy, direction);
     }
 }

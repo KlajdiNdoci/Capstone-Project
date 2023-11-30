@@ -40,8 +40,8 @@ public class ReviewService {
         return savedReview;
     }
 
-    public Page<Review> getReviews(int page, int size, String orderBy) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
+    public Page<Review> getReviews(int page, int size, String orderBy, String direction) {
+        Pageable pageable = PageRequest.of(page, size,  Sort.by(Sort.Direction.fromString(direction), orderBy));
         return reviewRepository.findAll(pageable);
     }
 
@@ -67,8 +67,8 @@ public class ReviewService {
         gameService.updateGameAverageRating(gameId);
     }
 
-    public Page<Review> findReviewsByGameId(int page, int size, UUID id, String order, String direction) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), order));
+    public Page<Review> findReviewsByGameId(int page, int size, UUID id, String orderBy, String direction) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), orderBy));
         return reviewRepository.findByGameId(id, pageable);
     }
 

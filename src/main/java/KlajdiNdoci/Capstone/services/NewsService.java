@@ -36,8 +36,8 @@ public class NewsService {
         return newsRepository.save(newNews);
     }
 
-    public Page<News> getNews(int page, int size, String orderBy) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
+    public Page<News> getNews(int page, int size, String orderBy, String direction) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction),orderBy));
         return newsRepository.findAll(pageable);
     }
 

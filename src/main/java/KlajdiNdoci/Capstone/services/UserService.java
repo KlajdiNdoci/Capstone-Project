@@ -29,12 +29,12 @@ public class UserService {
     @Autowired
     private CloudinaryService cloudinaryService;
 
-    public Page<User> findAll(int page, int size, String sortBy) {
+    public Page<User> findAll(int page, int size, String sortBy, String direction) {
         if (size < 0)
             size = 10;
         if (size > 100)
             size = 20;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction),sortBy));
         return utenteRepository.findAll(pageable);
     }
 

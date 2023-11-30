@@ -34,8 +34,8 @@ public class CommentService {
         return commentRepository.save(newComment);
     }
 
-    public Page<Comment> getComments(int page, int size, String orderBy) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
+    public Page<Comment> getComments(int page, int size, String orderBy, String direction) {
+        Pageable pageable = PageRequest.of(page, size,Sort.by(Sort.Direction.fromString(direction), orderBy));
         return commentRepository.findAll(pageable);
     }
 

@@ -28,8 +28,12 @@ public class UserController {
     @GetMapping("")
     public Page<User> getUser(@RequestParam(defaultValue = "0") int page,
                               @RequestParam(defaultValue = "10") int size,
-                              @RequestParam(defaultValue = "id") String orderBy) {
-        return userService.findAll(page, size > 20 ? 5 : size, orderBy);
+                              @RequestParam(defaultValue = "createdAt") String orderBy,
+                              @RequestParam(defaultValue = "desc") String direction) {
+        if (!direction.equalsIgnoreCase("desc") && !direction.equalsIgnoreCase("asc")) {
+            throw new IllegalArgumentException("The direction has to be 'asc' or 'desc'!");
+        }
+        return userService.findAll(page, size > 20 ? 5 : size, orderBy, direction);
     }
 
 

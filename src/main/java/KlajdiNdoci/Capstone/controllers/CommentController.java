@@ -27,9 +27,13 @@ public class CommentController {
 
     @GetMapping("")
     public Page<Comment> getComments(@RequestParam(defaultValue = "0") int page,
-                              @RequestParam(defaultValue = "10") int size,
-                              @RequestParam(defaultValue = "id") String orderBy) {
-        return commentService.getComments(page, size > 20 ? 5 : size, orderBy);
+                                     @RequestParam(defaultValue = "10") int size,
+                                     @RequestParam(defaultValue = "createdAt") String orderBy,
+                                     @RequestParam(defaultValue = "desc") String direction) {
+        if (!direction.equalsIgnoreCase("desc") && !direction.equalsIgnoreCase("asc")) {
+            throw new IllegalArgumentException("The direction has to be 'asc' or 'desc'!");
+        }
+        return commentService.getComments(page, size > 20 ? 5 : size, orderBy, direction);
     }
 
     @PostMapping("")

@@ -5,8 +5,10 @@ import KlajdiNdoci.Capstone.enums.Platform;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 @Entity
@@ -62,6 +64,10 @@ public class Game {
     @JsonIgnore
     @OneToMany(mappedBy = "game", cascade = CascadeType.REMOVE)
     private List<News> news;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    protected LocalDateTime createdAt;
 
     public void calculateAverageRating() {
         if (reviews != null && !reviews.isEmpty()) {

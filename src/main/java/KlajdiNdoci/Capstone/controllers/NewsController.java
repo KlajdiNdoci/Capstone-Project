@@ -27,9 +27,13 @@ public class NewsController {
 
     @GetMapping("")
     public Page<News> getNews(@RequestParam(defaultValue = "0") int page,
-                               @RequestParam(defaultValue = "10") int size,
-                               @RequestParam(defaultValue = "id") String orderBy) {
-        return newsService.getNews(page, size > 20 ? 5 : size, orderBy);
+                              @RequestParam(defaultValue = "10") int size,
+                              @RequestParam(defaultValue = "createdAt") String orderBy,
+                              @RequestParam(defaultValue = "desc") String direction) {
+        if (!direction.equalsIgnoreCase("desc") && !direction.equalsIgnoreCase("asc")) {
+            throw new IllegalArgumentException("The direction has to be 'asc' or 'desc'!");
+        }
+        return newsService.getNews(page, size > 20 ? 5 : size, orderBy, direction);
     }
 
     @PostMapping("")

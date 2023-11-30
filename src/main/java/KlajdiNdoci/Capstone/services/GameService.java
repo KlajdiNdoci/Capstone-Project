@@ -1,6 +1,7 @@
 package KlajdiNdoci.Capstone.services;
 
 import KlajdiNdoci.Capstone.entities.Game;
+import KlajdiNdoci.Capstone.entities.Review;
 import KlajdiNdoci.Capstone.enums.GameGenre;
 import KlajdiNdoci.Capstone.enums.Platform;
 import KlajdiNdoci.Capstone.exceptions.NotFoundException;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class GameService {
@@ -54,8 +56,8 @@ public class GameService {
         return gameRepository.save(newGame);
     }
 
-    public Page<Game> getGames(int page, int size, String orderBy) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
+    public Page<Game> getGames(int page, int size, String orderBy, String direction) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction),orderBy));
         Page<Game> gamesPage = gameRepository.findAll(pageable);
         gamesPage.getContent().forEach(Game::calculateAverageRating);
         return gameRepository.findAll(pageable);
@@ -143,5 +145,13 @@ public class GameService {
         Game game = findById(gameId);
         game.calculateAverageRating();
         gameRepository.save(game);
+    }
+
+    public Page<Game> findGamesByPlatforms(int page, int size, List<String> platforms, String order, String direction) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), order));
+        List<Platform> platformList = platforms.stream()
+                .map(Platform::valueOf)
+                .toList();
+        return gameRepository.findByPlatformsIn(platformList, pageable);
     }
 }
