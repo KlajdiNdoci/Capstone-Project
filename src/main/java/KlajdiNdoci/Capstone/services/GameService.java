@@ -6,6 +6,7 @@ import KlajdiNdoci.Capstone.enums.GameGenre;
 import KlajdiNdoci.Capstone.enums.Platform;
 import KlajdiNdoci.Capstone.exceptions.NotFoundException;
 import KlajdiNdoci.Capstone.payloads.NewGameDTO;
+import KlajdiNdoci.Capstone.payloads.PlatformDTO;
 import KlajdiNdoci.Capstone.repositories.GameRepository;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
@@ -147,9 +148,10 @@ public class GameService {
         gameRepository.save(game);
     }
 
-    public Page<Game> findGamesByPlatforms(int page, int size, List<String> platforms, String order, String direction) {
+    public Page<Game> findGamesByPlatforms(int page, int size, PlatformDTO body, String order, String direction) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), order));
-        List<Platform> platformList = platforms.stream()
+        List<Platform> platformList = body.platforms().stream()
+                .map(String::toUpperCase)
                 .map(Platform::valueOf)
                 .toList();
         return gameRepository.findByPlatformsIn(platformList, pageable);

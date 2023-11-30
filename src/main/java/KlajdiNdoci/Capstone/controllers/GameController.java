@@ -5,6 +5,7 @@ import KlajdiNdoci.Capstone.entities.Review;
 import KlajdiNdoci.Capstone.enums.Platform;
 import KlajdiNdoci.Capstone.exceptions.BadRequestException;
 import KlajdiNdoci.Capstone.payloads.NewGameDTO;
+import KlajdiNdoci.Capstone.payloads.PlatformDTO;
 import KlajdiNdoci.Capstone.repositories.GameRepository;
 import KlajdiNdoci.Capstone.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,15 +107,20 @@ public class GameController {
         }
     }
 
-    @GetMapping("/platforms")
-    public Page<Game> getGamesByPlatforms(@RequestBody List<String> platforms,
-                                            @RequestParam(defaultValue = "0") int page,
-                                            @RequestParam(defaultValue = "10") int size,
-                                            @RequestParam(defaultValue = "rating") String orderBy,
-                                            @RequestParam(defaultValue = "desc") String direction) {
-        if (!direction.equalsIgnoreCase("desc") && !direction.equalsIgnoreCase("asc")) {
-            throw new IllegalArgumentException("The direction has to be 'asc' or 'desc'!");
+    @PostMapping("/platforms")
+    public Page<Game> getGamesByPlatforms(@RequestBody @Validated PlatformDTO platforms,
+                                          BindingResult validation,
+                                          @RequestParam(defaultValue = "0") int page,
+                                          @RequestParam(defaultValue = "10") int size,
+                                          @RequestParam(defaultValue = "averageRating") String orderBy,
+                                          @RequestParam(defaultValue = "desc") String direction) {
+        if (validation.hasErrors()) {
+            throw new BadRequestException(validation.getAllErrors());
+        } else {
+            if (!direction.equalsIgnoreCase("desc") && !direction.equalsIgnoreCase("asc")) {
+                throw new IllegalArgumentException("The direction has to be 'asc' or 'desc'!");
+            }
+            return gameService.findGamesByPlatforms(page, size > 20 ? 5 : size, platforms, orderBy, direction);
         }
-        return gameService.findGamesByPlatforms(page, size > 20 ? 5 : size, platforms, orderBy, direction);
     }
 }
