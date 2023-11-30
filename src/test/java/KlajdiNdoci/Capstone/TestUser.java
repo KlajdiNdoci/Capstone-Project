@@ -5,6 +5,7 @@ import KlajdiNdoci.Capstone.entities.User;
 import KlajdiNdoci.Capstone.payloads.NewUserDTO;
 import KlajdiNdoci.Capstone.payloads.UserLoginDTO;
 import KlajdiNdoci.Capstone.services.AuthService;
+import KlajdiNdoci.Capstone.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,14 +16,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+
+import java.util.Arrays;
+import java.util.List;
+
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @WebMvcTest(controllers = AuthController.class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -36,6 +43,8 @@ public class TestUser {
     private MockMvc mockMvc;
     @MockBean
     private AuthService authService;
+    @MockBean
+    private UserService userService;
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -65,5 +74,14 @@ public class TestUser {
         resp.andExpect(MockMvcResultMatchers.status().isOk());
     }
 
-
+//    @Test
+//    public void getAllUsers() throws Exception {
+//        List<User> users = Arrays.asList(new User(), new User());
+//        Page<User> userPage = new PageImpl<>(users);
+//
+//        given(userService.getUsers(ArgumentMatchers.anyInt(), ArgumentMatchers.anyInt(), ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).willReturn(userPage);
+//
+//        ResultActions resp = mockMvc.perform(get("/users").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(users)));
+//        resp.andExpect(MockMvcResultMatchers.status().isOk());
+//    }
 }

@@ -33,7 +33,7 @@ public class UserController {
         if (!direction.equalsIgnoreCase("desc") && !direction.equalsIgnoreCase("asc")) {
             throw new IllegalArgumentException("The direction has to be 'asc' or 'desc'!");
         }
-        return userService.findAll(page, size > 20 ? 5 : size, orderBy, direction);
+        return userService.getUsers(page, size > 20 ? 5 : size, orderBy, direction);
     }
 
 

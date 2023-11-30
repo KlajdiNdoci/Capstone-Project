@@ -1,5 +1,6 @@
 package KlajdiNdoci.Capstone.services;
 
+import KlajdiNdoci.Capstone.entities.Review;
 import KlajdiNdoci.Capstone.entities.User;
 import KlajdiNdoci.Capstone.exceptions.NotFoundException;
 import KlajdiNdoci.Capstone.payloads.NewUserDTO;
@@ -21,7 +22,7 @@ import java.util.UUID;
 
 public class UserService {
     @Autowired
-    private UserRepository utenteRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private Cloudinary cloudinary;
@@ -29,18 +30,14 @@ public class UserService {
     @Autowired
     private CloudinaryService cloudinaryService;
 
-    public Page<User> findAll(int page, int size, String sortBy, String direction) {
-        if (size < 0)
-            size = 10;
-        if (size > 100)
-            size = 20;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction),sortBy));
-        return utenteRepository.findAll(pageable);
+    public Page<User> getUsers(int page, int size, String orderBy, String direction) {
+        Pageable pageable = PageRequest.of(page, size,  Sort.by(Sort.Direction.fromString(direction), orderBy));
+        return userRepository.findAll(pageable);
     }
 
 
     public User findUserById(UUID id) throws NotFoundException {
-        return utenteRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
     public User findByIdAndUpdate(UUID id, NewUserDTO u) throws NotFoundException {
@@ -49,7 +46,7 @@ public class UserService {
         foundUser.setName(u.name());
         foundUser.setSurname(u.surname());
         foundUser.setEmail(u.email());
-        return utenteRepository.save(foundUser);
+        return userRepository.save(foundUser);
     }
 
     public void findByIdAndDelete(UUID id) throws NotFoundException {
@@ -57,25 +54,25 @@ public class UserService {
         if (!foundUser.getAvatar().equals("https://ui-avatars.com/api/?name=" + foundUser.getName() + "+" + foundUser.getSurname())) {
             cloudinaryService.deleteImageByUrl(foundUser.getAvatar());
         }
-        utenteRepository.delete(foundUser);
+        userRepository.delete(foundUser);
     }
 
     public User findUserByEmail(String email) throws NotFoundException {
-        return utenteRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(email));
+        return userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(email));
     }
 
     public void deleteAllUtenti() {
-        utenteRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     public User uploadImg(MultipartFile file, UUID id) throws IOException {
-        User u = utenteRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+        User u = userRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
         String url = (String) cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
         if (!u.getAvatar().equals("https://ui-avatars.com/api/?name=" + u.getName() + "+" + u.getSurname())) {
             cloudinaryService.deleteImageByUrl(u.getAvatar());
         }
         u.setAvatar(url);
-        utenteRepository.save(u);
+        userRepository.save(u);
         return u;
     }
 }
