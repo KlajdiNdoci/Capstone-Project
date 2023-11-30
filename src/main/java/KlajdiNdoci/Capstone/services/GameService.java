@@ -156,4 +156,9 @@ public class GameService {
                 .toList();
         return gameRepository.findByPlatformsIn(platformList, pageable);
     }
+
+    public Page<Game> findGamesByTitleStartsWith(int page, int size, String q, String order, String direction) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), order));
+        return gameRepository.findByTitleStartsWithIgnoreCase(q, pageable);
+    }
 }
