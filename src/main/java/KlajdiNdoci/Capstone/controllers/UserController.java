@@ -26,7 +26,7 @@ public class UserController {
 
 
     @GetMapping("")
-    public Page<User> getUser(@RequestParam(defaultValue = "0") int page,
+    public Page<User> getUsers(@RequestParam(defaultValue = "0") int page,
                               @RequestParam(defaultValue = "10") int size,
                               @RequestParam(defaultValue = "createdAt") String orderBy,
                               @RequestParam(defaultValue = "desc") String direction) {
@@ -66,8 +66,12 @@ public class UserController {
     }
 
     @PutMapping("/me")
-    public UserDetails updateProfile(@AuthenticationPrincipal User currentUser, @RequestBody NewUserDTO body) {
-        return userService.findByIdAndUpdate(currentUser.getId(), body);
+    public UserDetails updateProfile(@AuthenticationPrincipal User currentUser, @RequestBody @Validated NewUserDTO body, BindingResult validation) {
+        if (validation.hasErrors()) {
+            throw new BadRequestException(validation.getAllErrors());
+        } else {
+            return userService.findByIdAndUpdate(currentUser.getId(), body);
+        }
     }
 
     @DeleteMapping("/me")

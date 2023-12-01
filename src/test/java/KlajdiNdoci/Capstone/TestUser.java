@@ -1,10 +1,11 @@
 package KlajdiNdoci.Capstone;
 
 import KlajdiNdoci.Capstone.controllers.AuthController;
+import KlajdiNdoci.Capstone.controllers.UserController;
 import KlajdiNdoci.Capstone.entities.User;
+import KlajdiNdoci.Capstone.enums.UserRole;
 import KlajdiNdoci.Capstone.payloads.NewUserDTO;
 import KlajdiNdoci.Capstone.payloads.UserLoginDTO;
-import KlajdiNdoci.Capstone.services.AuthService;
 import KlajdiNdoci.Capstone.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,64 +25,53 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
-import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.mockito.BDDMockito.given;
 
-@WebMvcTest(controllers = AuthController.class)
+@WebMvcTest(controllers = UserController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
-@ContextConfiguration(classes = {AuthController.class})
+@ContextConfiguration(classes = {UserController.class})
 public class TestUser {
     NewUserDTO newUser;
-    UserLoginDTO userLoginDTO;
-
-    @Autowired
-    private MockMvc mockMvc;
-    @MockBean
-    private AuthService authService;
     @MockBean
     private UserService userService;
     @Autowired
+    private MockMvc mockMvc;
+    @Autowired
     private ObjectMapper objectMapper;
-
 
     @BeforeEach
     public void init() {
         newUser = new NewUserDTO("username", "nome", "cognome", "email@email.com", "ddfmoikmfdDFFd5445)");
-        userLoginDTO = new UserLoginDTO("dssdsdsdds@ds.com", "dsdsffdffddf");
     }
+        @Test
+        public void getAllUsers() throws Exception {
+        List<User> users = Arrays.asList(new User(), new User());
+        Page<User> userPage = new PageImpl<>(users);
 
+        given(userService.getUsers(ArgumentMatchers.anyInt(), ArgumentMatchers.anyInt(), ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).willReturn(userPage);
 
-    @Test
-    public void createUser() throws Exception {
-        given(authService.saveUser(ArgumentMatchers.any())).willReturn(new User());
-
-        ResultActions resp = mockMvc.perform(post("/auth/register").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(newUser)));
-
-        resp.andExpect(MockMvcResultMatchers.status().isCreated());
-    }
-
-    @Test
-    public void loginUser() throws Exception {
-        given(authService.authenticateUser(ArgumentMatchers.any())).willReturn("");
-
-        ResultActions resp = mockMvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userLoginDTO)));
-
+        ResultActions resp = mockMvc.perform(get("/users").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(users)));
         resp.andExpect(MockMvcResultMatchers.status().isOk());
     }
 
-//    @Test
-//    public void getAllUsers() throws Exception {
-//        List<User> users = Arrays.asList(new User(), new User());
-//        Page<User> userPage = new PageImpl<>(users);
-//
-//        given(userService.getUsers(ArgumentMatchers.anyInt(), ArgumentMatchers.anyInt(), ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).willReturn(userPage);
-//
-//        ResultActions resp = mockMvc.perform(get("/users").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(users)));
-//        resp.andExpect(MockMvcResultMatchers.status().isOk());
-//    }
+    @Test
+    public void deleteUser() throws Exception {
+        UUID uuid = UUID.randomUUID();
+        ResultActions resp = mockMvc.perform(delete("/users/"+uuid).contentType(MediaType.APPLICATION_JSON).content(""));
+        resp.andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+
+    @Test
+    public void getById() throws Exception {
+            UUID uuid = UUID.randomUUID();
+            given(userService.findUserById(ArgumentMatchers.eq(uuid))).willReturn(new User());
+            ResultActions resp = mockMvc.perform((get("/users/"+ uuid).contentType(MediaType.APPLICATION_JSON)).content(objectMapper.writeValueAsString(new User())));
+            resp.andExpect(MockMvcResultMatchers.status().isOk());
+    }
 }
