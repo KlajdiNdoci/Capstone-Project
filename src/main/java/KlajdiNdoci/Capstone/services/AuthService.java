@@ -45,7 +45,7 @@ public class AuthService {
         });
 
         User newUser = new User();
-        newUser.setAvatar("https://ui-avatars.com/api/?name=" + body.name() + "+" + body.surname());
+        newUser.setAvatar("https://ui-avatars.com/api/?name=" + body.username());
         newUser.setUsername(body.username());
         newUser.setName(body.name());
         newUser.setSurname(body.surname());
