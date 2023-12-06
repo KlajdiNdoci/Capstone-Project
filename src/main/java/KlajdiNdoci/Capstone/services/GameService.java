@@ -5,6 +5,7 @@ import KlajdiNdoci.Capstone.entities.Review;
 import KlajdiNdoci.Capstone.enums.GameGenre;
 import KlajdiNdoci.Capstone.enums.Platform;
 import KlajdiNdoci.Capstone.exceptions.NotFoundException;
+import KlajdiNdoci.Capstone.exceptions.UnsupportedMediaTypeException;
 import KlajdiNdoci.Capstone.payloads.NewGameDTO;
 import KlajdiNdoci.Capstone.payloads.PlatformDTO;
 import KlajdiNdoci.Capstone.repositories.GameRepository;
@@ -19,9 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,6 +39,8 @@ public class GameService {
         newGame.setGameCover("https://tritonsubs.com/wp-content/uploads/2020/07/Placeholder-16x9-1.jpg");
         newGame.setDescription(body.description());
         newGame.setTitle(body.title());
+        newGame.setDeveloper(body.developer());
+        newGame.setPublisher(body.publisher());
         newGame.setReleaseDate(body.releaseDate());
 
         List<GameGenre> genres = new ArrayList<>();
@@ -87,7 +88,11 @@ public class GameService {
 
     public Game uploadTrailer(MultipartFile file, UUID id) throws IOException {
         Game found = gameRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
-        String url = (String) cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
+        if (!Arrays.asList("video/mp4", "video/avi", "video/mov").contains(file.getContentType())) {
+            throw new UnsupportedMediaTypeException("The format of the video is not supported");
+        }
+        Map<String, Object> params = ObjectUtils.asMap("resource_type", "video");
+        String url = (String) cloudinary.uploader().upload(file.getBytes(), params).get("url");
         if (found.getTrailer() != null) {
             cloudinaryService.deleteImageByUrl(found.getTrailer());
         }
@@ -95,6 +100,7 @@ public class GameService {
         gameRepository.save(found);
         return found;
     }
+
 
     public Game uploadCover(MultipartFile file, UUID id) throws IOException {
         Game found = gameRepository.findById(id).orElseThrow(() -> new NotFoundException(id));

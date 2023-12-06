@@ -13,6 +13,10 @@ public record NewGameDTO (
         String title,
         @NotEmpty(message = "The field description cannot be empty!")
         String description,
+        @NotEmpty(message = "The field developer cannot be empty!")
+        String developer,
+        @NotEmpty(message = "The field publisher cannot be empty!")
+        String publisher,
         @NotEmpty(message = "The field genres cannot be empty!")
         List<String> genres,
         @NotEmpty(message = "The field platforms cannot be empty!")

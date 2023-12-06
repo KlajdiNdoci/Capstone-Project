@@ -25,6 +25,8 @@ public class Game {
     @Setter(AccessLevel.NONE)
     private UUID id;
     private String title;
+    private String developer;
+    private String publisher;
     private String trailer;
     private String gameCover;
     private LocalDate releaseDate;
