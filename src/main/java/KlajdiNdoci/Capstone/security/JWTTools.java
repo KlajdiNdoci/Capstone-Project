@@ -14,8 +14,8 @@ public class JWTTools {
     @Value("${spring.jwt.secret}")
     private String secret;
 
-    public String createToken(User utente) {
-        return Jwts.builder().setSubject(String.valueOf(utente.getId()))
+    public String createToken(User user) {
+        return Jwts.builder().setSubject(String.valueOf(user.getId()))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
                 .signWith(Keys.hmacShaKeyFor(secret.getBytes())).compact();
@@ -26,7 +26,7 @@ public class JWTTools {
             Jwts.parserBuilder().setSigningKey(Keys.hmacShaKeyFor(secret.getBytes()))
                     .build().parse(token);
         } catch (Exception e) {
-            throw new UnauthorizedException("Token non valido, rifai il login!");
+            throw new UnauthorizedException("Token not valid, redo the login!");
         }
     }
 

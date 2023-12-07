@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -70,6 +71,12 @@ public class ReviewService {
     public Page<Review> findReviewsByGameId(int page, int size, UUID id, String orderBy, String direction) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), orderBy));
         return reviewRepository.findByGameId(id, pageable);
+    }
+    public Page<Review> findReviewsByGameIdAndDate(int page, int size, UUID id, String orderBy, String direction, int days) {
+        LocalDateTime startDate = LocalDateTime.now().minusDays(days);
+        LocalDateTime endDate = LocalDateTime.now();
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), orderBy));
+        return reviewRepository.findByGameIdAndCreatedAtBetween(id, startDate, endDate, pageable);
     }
 
 }

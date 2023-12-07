@@ -90,4 +90,18 @@ public class ReviewController {
         }
         return reviewService.findReviewsByGameId(page, size > 20 ? 5 : size, gameId, orderBy, direction);
     }
+    @GetMapping("/game/{gameId}/{minusDays}")
+    public Page<Review> getReviewsByGameIdAndLastMonth(
+            @PathVariable UUID gameId,
+            @PathVariable int minusDays,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "rating") String orderBy,
+            @RequestParam(defaultValue = "desc") String direction
+    ) {
+        if (!direction.equalsIgnoreCase("desc") && !direction.equalsIgnoreCase("asc")) {
+            throw new IllegalArgumentException("The direction has to be 'asc' or 'desc'!");
+        }
+        return reviewService.findReviewsByGameIdAndDate(page, size > 20 ? 5 : size, gameId, orderBy, direction, minusDays);
+    }
 }
