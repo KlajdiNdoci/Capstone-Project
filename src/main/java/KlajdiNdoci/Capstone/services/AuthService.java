@@ -44,6 +44,10 @@ public class AuthService {
             throw new BadRequestException("The email " + user.getEmail() + " has already been used!");
         });
 
+        userRepository.findByUsername(body.username()).ifPresent(user -> {
+            throw new BadRequestException("The username " + user.getUsername() + " has already been used!");
+        });
+
         User newUser = new User();
         newUser.setAvatar("https://ui-avatars.com/api/?name=" + body.username());
         newUser.setUsername(body.username());
