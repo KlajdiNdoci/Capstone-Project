@@ -104,4 +104,10 @@ public class ReviewController {
         }
         return reviewService.findReviewsByGameIdAndDate(page, size > 20 ? 5 : size, gameId, orderBy, direction, minusDays);
     }
+
+    @PostMapping("/{reviewId}/like")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    public Review likeReview(@PathVariable UUID reviewId, @AuthenticationPrincipal User currentUser) {
+        return reviewService.likeReview(reviewId, currentUser.getId());
+    }
 }

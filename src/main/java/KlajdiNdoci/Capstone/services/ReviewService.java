@@ -3,6 +3,7 @@ package KlajdiNdoci.Capstone.services;
 import KlajdiNdoci.Capstone.entities.Comment;
 import KlajdiNdoci.Capstone.entities.Game;
 import KlajdiNdoci.Capstone.entities.Review;
+import KlajdiNdoci.Capstone.entities.User;
 import KlajdiNdoci.Capstone.exceptions.NotFoundException;
 import KlajdiNdoci.Capstone.payloads.NewNewsDTO;
 import KlajdiNdoci.Capstone.payloads.NewReviewDTO;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -79,4 +81,15 @@ public class ReviewService {
         return reviewRepository.findByGameIdAndCreatedAtBetween(id, startDate, endDate, pageable);
     }
 
+    public Review likeReview(UUID reviewId, UUID userId) {
+        Review review = findById(reviewId);
+        User user = userService.findUserById(userId);
+
+        if (!review.getLikes().contains(user)) {
+            review.getLikes().add(user);
+        } else {
+            review.getLikes().remove(user);
+        }
+        return reviewRepository.save(review);
+    }
 }
