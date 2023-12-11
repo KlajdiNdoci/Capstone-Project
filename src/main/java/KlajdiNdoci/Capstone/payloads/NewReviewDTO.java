@@ -15,8 +15,6 @@ public record NewReviewDTO(
         @NotNull(message = "The field rating cannot be null!")
         @Min(value = 1, message = "The rating must be at least 1")
         @Max(value = 5, message = "The rating must be at most 5")
-        Integer rating,
-        @NotNull(message = "The field gameId cannot be null!")
-        UUID gameId
+        Integer rating
 ) {
 }

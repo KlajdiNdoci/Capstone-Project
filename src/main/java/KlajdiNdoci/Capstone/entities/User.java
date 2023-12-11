@@ -65,6 +65,15 @@ public class User implements UserDetails {
     )
     private List<User> friends;
 
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "review_likes",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "review_id")
+    )
+    private List<Review> likes;
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     protected LocalDateTime createdAt;

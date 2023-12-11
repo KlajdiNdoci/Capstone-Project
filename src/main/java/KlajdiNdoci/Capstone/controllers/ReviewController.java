@@ -37,14 +37,14 @@ public class ReviewController {
         return reviewService.getReviews(page, size > 20 ? 5 : size, orderBy, direction);
     }
 
-    @PostMapping("")
+    @PostMapping("/game/{reviewId}")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    public Review createReview(@RequestBody @Validated NewReviewDTO body, BindingResult validation, @AuthenticationPrincipal User currentUser) {
+    public Review createReview(@PathVariable UUID reviewId,@RequestBody @Validated NewReviewDTO body, BindingResult validation, @AuthenticationPrincipal User currentUser) {
         if (validation.hasErrors()) {
             throw new BadRequestException(validation.getAllErrors());
         } else {
-            return reviewService.save(body, currentUser.getId());
+            return reviewService.save(reviewId, body, currentUser.getId());
         }
     }
 
@@ -83,7 +83,7 @@ public class ReviewController {
     public Page<Review> getReviewsByGameId(@PathVariable UUID gameId,
                                            @RequestParam(defaultValue = "0") int page,
                                            @RequestParam(defaultValue = "10") int size,
-                                           @RequestParam(defaultValue = "rating") String orderBy,
+                                           @RequestParam(defaultValue = "createdAt") String orderBy,
                                            @RequestParam(defaultValue = "desc") String direction) {
         if (!direction.equalsIgnoreCase("desc") && !direction.equalsIgnoreCase("asc")) {
             throw new IllegalArgumentException("The direction has to be 'asc' or 'desc'!");
@@ -105,18 +105,10 @@ public class ReviewController {
         return reviewService.findReviewsByGameIdAndDate(page, size > 20 ? 5 : size, gameId, orderBy, direction, minusDays);
     }
 
-    @PostMapping("/{reviewId}/like")
+    @PostMapping("/{reviewId}/likes")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public Review likeReview(@PathVariable UUID reviewId, @AuthenticationPrincipal User currentUser) {
         return reviewService.likeReview(reviewId, currentUser.getId());
     }
 
-    @GetMapping("/{reviewId}/like")
-    public Page<User> getLikesById(
-            @PathVariable UUID reviewId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
-    ) {
-        return reviewService.findLikesById(page, size > 20 ? 5 : size, reviewId);
-    }
 }

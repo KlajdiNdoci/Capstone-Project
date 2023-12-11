@@ -42,7 +42,7 @@ public class Review {
     @JoinColumn(name = "game_id")
     private Game game;
 
-    @JsonIgnore
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "review_likes",
@@ -50,4 +50,7 @@ public class Review {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<User> likes;
+
+
 }
+

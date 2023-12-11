@@ -36,14 +36,14 @@ public class NewsController {
         return newsService.getNews(page, size > 20 ? 5 : size, orderBy, direction);
     }
 
-    @PostMapping("")
+    @PostMapping("/game/{gameId}")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public News createNews(@RequestBody @Validated NewNewsDTO body, BindingResult validation, @AuthenticationPrincipal User currentUser) {
+    public News createNews(@PathVariable UUID gameId,@RequestBody @Validated NewNewsDTO body, BindingResult validation, @AuthenticationPrincipal User currentUser) {
         if (validation.hasErrors()) {
             throw new BadRequestException(validation.getAllErrors());
         } else {
-            return newsService.save(body, currentUser.getId());
+            return newsService.save(gameId, body, currentUser.getId());
         }
     }
 

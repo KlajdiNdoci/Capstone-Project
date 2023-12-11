@@ -24,8 +24,8 @@ public class NewsService {
     private GameService gameService;
 
 
-    public News save( NewNewsDTO body, UUID userId) {
-        Game foundGame = gameService.findById(body.gameId());
+    public News save( UUID gameId, NewNewsDTO body, UUID userId) {
+        Game foundGame = gameService.findById(gameId);
         News newNews =News.builder()
                 .content(body.content())
                 .title(body.title())

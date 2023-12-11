@@ -30,12 +30,13 @@ public class ReviewService {
     @Autowired
     private ReviewRepository reviewRepository;
 
-    public Review save(NewReviewDTO body, UUID userId) {
+    public Review save(UUID reviewId, NewReviewDTO body, UUID userId) {
+        Game found = gameService.findById(reviewId);
         Review newReview =Review.builder()
                 .content(body.content())
                 .user(userService.findUserById(userId))
                 .title(body.title())
-                .game(gameService.findById(body.gameId()))
+                .game(found)
                 .rating(body.rating())
                 .build();
         Review savedReview = reviewRepository.save(newReview);
@@ -64,8 +65,10 @@ public class ReviewService {
     }
 
     public void findByIdAndDelete(UUID id) {
-        Review found = reviewRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+        Review found = findById(id);
         UUID gameId = found.getGame().getId();
+        found.getLikes().forEach(user -> user.getLikes().remove(found));
+        found.setLikes(null);
         reviewRepository.delete(found);
         gameService.updateGameAverageRating(gameId);
     }
@@ -92,8 +95,5 @@ public class ReviewService {
         }
         return reviewRepository.save(review);
     }
-    public Page<User> findLikesById(int page, int size, UUID id) {
-        Pageable pageable = PageRequest.of(page, size);
-        return reviewRepository.findLikesById(id, pageable);
-    }
+
 }
