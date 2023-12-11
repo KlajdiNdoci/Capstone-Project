@@ -92,4 +92,8 @@ public class ReviewService {
         }
         return reviewRepository.save(review);
     }
+    public Page<User> findLikesById(int page, int size, UUID id) {
+        Pageable pageable = PageRequest.of(page, size);
+        return reviewRepository.findLikesById(id, pageable);
+    }
 }

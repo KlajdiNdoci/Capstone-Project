@@ -110,4 +110,13 @@ public class ReviewController {
     public Review likeReview(@PathVariable UUID reviewId, @AuthenticationPrincipal User currentUser) {
         return reviewService.likeReview(reviewId, currentUser.getId());
     }
+
+    @GetMapping("/{reviewId}/like")
+    public Page<User> getLikesById(
+            @PathVariable UUID reviewId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return reviewService.findLikesById(page, size > 20 ? 5 : size, reviewId);
+    }
 }
