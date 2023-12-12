@@ -5,11 +5,13 @@ import KlajdiNdoci.Capstone.enums.Platform;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 @Entity
 @Table(name = "games")
@@ -41,12 +43,22 @@ public class Game {
     private List<String> gameImages;
 
     @ElementCollection(targetClass = GameGenre.class)
-    @CollectionTable(name = "game_genres", joinColumns = @JoinColumn(name = "game_id"))
+    @CollectionTable(name = "game_genres",
+            joinColumns = @JoinColumn(name = "game_id"),
+            foreignKey = @ForeignKey(
+            name = "game_id",
+            foreignKeyDefinition = "FOREIGN KEY (game_id) REFERENCES games(id) ON DELETE CASCADE")
+    )
     @Enumerated(EnumType.STRING)
     private List<GameGenre> genres;
 
     @ElementCollection(targetClass = Platform.class)
-    @CollectionTable(name = "game_platforms", joinColumns = @JoinColumn(name = "game_id"))
+    @CollectionTable(name = "game_platforms",
+            joinColumns = @JoinColumn(name = "game_id"),
+            foreignKey = @ForeignKey(
+            name = "game_id",
+            foreignKeyDefinition = "FOREIGN KEY (game_id) REFERENCES games(id) ON DELETE CASCADE")
+    )
     @Enumerated(EnumType.STRING)
     private List<Platform> platforms;
 

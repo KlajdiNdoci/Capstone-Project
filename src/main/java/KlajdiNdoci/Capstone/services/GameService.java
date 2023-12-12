@@ -39,8 +39,8 @@ public class GameService {
         newGame.setGameCover("https://tritonsubs.com/wp-content/uploads/2020/07/Placeholder-16x9-1.jpg");
         newGame.setDescription(body.description());
         newGame.setTitle(body.title());
-        newGame.setDeveloper(body.developer());
-        newGame.setPublisher(body.publisher());
+        newGame.setDeveloper(body.developer().toUpperCase());
+        newGame.setPublisher(body.publisher().toUpperCase());
         newGame.setReleaseDate(body.releaseDate());
 
         List<GameGenre> genres = new ArrayList<>();
@@ -83,6 +83,7 @@ public class GameService {
             }
             cloudinaryService.deleteImageByUrl(found.getTrailer());
         }
+
         gameRepository.delete(found);
     }
 
