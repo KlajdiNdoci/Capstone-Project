@@ -40,7 +40,7 @@ public class AuthService {
 
     public User saveUser(NewUserDTO body) throws IOException {
 
-        userRepository.findByEmail(body.email()).ifPresent(user -> {
+        userRepository.findByEmailIgnoreCase(body.email()).ifPresent(user -> {
             throw new BadRequestException("The email " + user.getEmail() + " has already been used!");
         });
 
@@ -54,7 +54,7 @@ public class AuthService {
         newUser.setName(body.name());
         newUser.setSurname(body.surname());
         newUser.setRole(UserRole.USER);
-        newUser.setEmail(body.email());
+        newUser.setEmail(body.email().toLowerCase());
         newUser.setPassword(bcrypt.encode(body.password()));
         User savedUser = userRepository.save(newUser);
         emailSender.sendRegistrationEmail(body.email());

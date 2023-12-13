@@ -134,4 +134,15 @@ public class GameController {
             }
             return gameService.findGamesByTitleStartsWith(page, size > 20 ? 5 : size, q, orderBy, direction);
         }
+    @GetMapping("/filter")
+    public Page<Game> filterGames(@RequestParam(defaultValue = "0") int page,
+                               @RequestParam(defaultValue = "10") int size,
+                               @RequestParam(defaultValue = "createdAt") String orderBy,
+                               @RequestParam(defaultValue = "") String filter,
+                               @RequestParam(defaultValue = "desc")String direction) {
+        if (!direction.equalsIgnoreCase("desc") && !direction.equalsIgnoreCase("asc")) {
+            throw new IllegalArgumentException("The direction has to be 'asc' or 'desc'!");
+        }
+        return gameService.filterGames(page, size > 20 ? 5 : size, orderBy, direction, filter);
+    }
 }

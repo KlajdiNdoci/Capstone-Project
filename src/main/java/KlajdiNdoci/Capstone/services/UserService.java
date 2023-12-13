@@ -58,7 +58,7 @@ public class UserService {
     }
 
     public User findUserByEmail(String email) throws NotFoundException {
-        return userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(email));
+        return userRepository.findByEmailIgnoreCase(email).orElseThrow(() -> new NotFoundException(email));
     }
 
     public void deleteAllUtenti() {

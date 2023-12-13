@@ -168,4 +168,11 @@ public class GameService {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), order));
         return gameRepository.findByTitleStartsWithIgnoreCase(q, pageable);
     }
+
+    public Page<Game> filterGames(int page, int size, String orderBy, String direction, String filter) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction),orderBy));
+        Page<Game> gamesPage = gameRepository.findAll(pageable);
+        gamesPage.getContent().forEach(Game::calculateAverageRating);
+        return gameRepository.findByGenres(GameGenre.valueOf(filter.toUpperCase()), pageable);
+    }
 }
