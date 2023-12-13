@@ -63,7 +63,7 @@ public class Game {
     private List<Platform> platforms;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "game", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "game", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<Review> reviews;
 
     @JsonIgnore
