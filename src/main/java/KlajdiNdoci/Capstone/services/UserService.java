@@ -1,9 +1,11 @@
 package KlajdiNdoci.Capstone.services;
 
+import KlajdiNdoci.Capstone.entities.Game;
 import KlajdiNdoci.Capstone.entities.Review;
 import KlajdiNdoci.Capstone.entities.User;
 import KlajdiNdoci.Capstone.exceptions.NotFoundException;
 import KlajdiNdoci.Capstone.payloads.NewUserDTO;
+import KlajdiNdoci.Capstone.repositories.GameRepository;
 import KlajdiNdoci.Capstone.repositories.UserRepository;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
@@ -26,6 +28,9 @@ public class UserService {
 
     @Autowired
     private Cloudinary cloudinary;
+
+    @Autowired
+    private GameService gameService;
 
     @Autowired
     private CloudinaryService cloudinaryService;
@@ -61,10 +66,6 @@ public class UserService {
         return userRepository.findByEmailIgnoreCase(email).orElseThrow(() -> new NotFoundException(email));
     }
 
-    public void deleteAllUtenti() {
-        userRepository.deleteAll();
-    }
-
     public User uploadImg(MultipartFile file, UUID id) throws IOException {
         User u = userRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
         String url = (String) cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
@@ -74,5 +75,17 @@ public class UserService {
         u.setAvatar(url);
         userRepository.save(u);
         return u;
+    }
+
+    public User addOrRemoveGame(UUID gameId, UUID userId) {
+        Game game = gameService.findById(gameId);
+        User user = findUserById(userId);
+
+        if (!user.getSavedGames().contains(game)) {
+            user.getSavedGames().add(game);
+        } else {
+            user.getSavedGames().remove(game);
+        }
+        return userRepository.save(user);
     }
 }

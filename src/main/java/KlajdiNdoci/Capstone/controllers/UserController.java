@@ -1,5 +1,7 @@
 package KlajdiNdoci.Capstone.controllers;
 
+import KlajdiNdoci.Capstone.entities.Game;
+import KlajdiNdoci.Capstone.entities.Review;
 import KlajdiNdoci.Capstone.entities.User;
 import KlajdiNdoci.Capstone.exceptions.BadRequestException;
 import KlajdiNdoci.Capstone.payloads.NewUserDTO;
@@ -103,5 +105,10 @@ public class UserController {
         }catch (Exception e){
             throw new BadRequestException(e.getMessage());
         }
+    }
+    @PostMapping("/{gameId}/games")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    public User addOrRemoveGame(@PathVariable UUID gameId, @AuthenticationPrincipal User currentUser) {
+        return userService.addOrRemoveGame(gameId, currentUser.getId());
     }
 }

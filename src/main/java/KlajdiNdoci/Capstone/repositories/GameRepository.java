@@ -2,6 +2,7 @@ package KlajdiNdoci.Capstone.repositories;
 
         import KlajdiNdoci.Capstone.entities.Game;
         import KlajdiNdoci.Capstone.entities.Review;
+        import KlajdiNdoci.Capstone.entities.User;
         import KlajdiNdoci.Capstone.enums.GameGenre;
         import KlajdiNdoci.Capstone.enums.Platform;
         import org.springframework.data.domain.Page;
@@ -20,4 +21,5 @@ public interface GameRepository extends JpaRepository<Game, UUID> {
     Page<Game> findByTitleStartsWithIgnoreCase(String q, Pageable pageable);
     Page<Game> findByGenres(GameGenre genre, Pageable pageable);
     Page<Game> findByPlatforms(Platform platform, Pageable pageable);
+    Page<Game> findByUsers(User user, Pageable pageable);
 }

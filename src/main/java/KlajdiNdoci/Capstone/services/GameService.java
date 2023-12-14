@@ -2,6 +2,7 @@ package KlajdiNdoci.Capstone.services;
 
 import KlajdiNdoci.Capstone.entities.Game;
 import KlajdiNdoci.Capstone.entities.Review;
+import KlajdiNdoci.Capstone.entities.User;
 import KlajdiNdoci.Capstone.enums.GameGenre;
 import KlajdiNdoci.Capstone.enums.Platform;
 import KlajdiNdoci.Capstone.exceptions.NotFoundException;
@@ -9,6 +10,7 @@ import KlajdiNdoci.Capstone.exceptions.UnsupportedMediaTypeException;
 import KlajdiNdoci.Capstone.payloads.NewGameDTO;
 import KlajdiNdoci.Capstone.payloads.PlatformDTO;
 import KlajdiNdoci.Capstone.repositories.GameRepository;
+import KlajdiNdoci.Capstone.repositories.UserRepository;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,8 @@ import java.util.stream.Collectors;
 public class GameService {
     @Autowired
     private GameRepository gameRepository;
-
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private Cloudinary cloudinary;
 
@@ -179,5 +182,11 @@ public class GameService {
         Page<Game> gamesPage = gameRepository.findAll(pageable);
         gamesPage.getContent().forEach(Game::calculateAverageRating);
         return gameRepository.findByPlatforms(Platform.valueOf(platform.toUpperCase()), pageable);
+    }
+
+    public Page<Game> findSavedGamesByUserId(int page, int size, UUID userId, String order, String direction) {
+        User user = userRepository.findById(userId).orElseThrow(()-> new NotFoundException("User with id " + userId + " not found"));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), order));
+        return gameRepository.findByUsers(user, pageable);
     }
 }
