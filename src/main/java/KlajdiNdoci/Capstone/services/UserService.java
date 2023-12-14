@@ -56,7 +56,7 @@ public class UserService {
 
     public void findByIdAndDelete(UUID id) throws NotFoundException {
         User foundUser = this.findUserById(id);
-        if (!foundUser.getAvatar().equals("https://ui-avatars.com/api/?name=" + foundUser.getName() + "+" + foundUser.getSurname())) {
+        if (!foundUser.getAvatar().equals("https://ui-avatars.com/api/?name=" + foundUser.getUsername())) {
             cloudinaryService.deleteImageByUrl(foundUser.getAvatar());
         }
         userRepository.delete(foundUser);
@@ -69,7 +69,7 @@ public class UserService {
     public User uploadImg(MultipartFile file, UUID id) throws IOException {
         User u = userRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
         String url = (String) cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
-        if (!u.getAvatar().equals("https://ui-avatars.com/api/?name=" + u.getName() + "+" + u.getSurname())) {
+        if (!u.getAvatar().equals("https://ui-avatars.com/api/?name=" + u.getUsername())) {
             cloudinaryService.deleteImageByUrl(u.getAvatar());
         }
         u.setAvatar(url);
@@ -87,5 +87,16 @@ public class UserService {
             user.getSavedGames().remove(game);
         }
         return userRepository.save(user);
+    }
+    public User addOrRemoveFriend( UUID friendId,UUID currentUserId) {
+        User currentUser = findUserById(currentUserId);
+        User friend = findUserById(friendId);
+
+        if (!currentUser.getFriends().contains(friend)) {
+            currentUser.getFriends().add(friend);
+        } else {
+            currentUser.getFriends().remove(friend);
+        }
+        return userRepository.save(currentUser);
     }
 }
