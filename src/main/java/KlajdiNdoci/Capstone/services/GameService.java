@@ -169,10 +169,15 @@ public class GameService {
         return gameRepository.findByTitleStartsWithIgnoreCase(q, pageable);
     }
 
-    public Page<Game> filterGames(int page, int size, String orderBy, String direction, String filter) {
+    public Page<Game> filterByGenres(int page, int size, String orderBy, String direction, String genre) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction),orderBy));
         Page<Game> gamesPage = gameRepository.findAll(pageable);
         gamesPage.getContent().forEach(Game::calculateAverageRating);
-        return gameRepository.findByGenres(GameGenre.valueOf(filter.toUpperCase()), pageable);
+        return gameRepository.findByGenres(GameGenre.valueOf(genre.toUpperCase()), pageable);
+    }  public Page<Game> filterByPlatforms(int page, int size, String orderBy, String direction, String platform) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction),orderBy));
+        Page<Game> gamesPage = gameRepository.findAll(pageable);
+        gamesPage.getContent().forEach(Game::calculateAverageRating);
+        return gameRepository.findByPlatforms(Platform.valueOf(platform.toUpperCase()), pageable);
     }
 }

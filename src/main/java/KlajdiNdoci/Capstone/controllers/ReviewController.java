@@ -27,6 +27,7 @@ public class ReviewController {
 
 
     @GetMapping("")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public Page<Review> getReviews(@RequestParam(defaultValue = "0") int page,
                                    @RequestParam(defaultValue = "10") int size,
                                    @RequestParam(defaultValue = "createdAt") String orderBy,
@@ -49,6 +50,7 @@ public class ReviewController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public Review findById(@PathVariable UUID id) {
         return reviewService.findById(id);
     }
@@ -80,6 +82,7 @@ public class ReviewController {
         }
     }
     @GetMapping("/game/{gameId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public Page<Review> getReviewsByGameId(@PathVariable UUID gameId,
                                            @RequestParam(defaultValue = "0") int page,
                                            @RequestParam(defaultValue = "10") int size,
@@ -91,6 +94,7 @@ public class ReviewController {
         return reviewService.findReviewsByGameId(page, size > 20 ? 5 : size, gameId, orderBy, direction);
     }
     @GetMapping("/game/{gameId}/{minusDays}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public Page<Review> getReviewsByGameIdAndLastMonth(
             @PathVariable UUID gameId,
             @PathVariable int minusDays,

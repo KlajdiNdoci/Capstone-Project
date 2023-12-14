@@ -31,6 +31,7 @@ public class GameController {
     private GameRepository gameRepository;
 
     @GetMapping("")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public Page<Game> getGames(@RequestParam(defaultValue = "0") int page,
                                @RequestParam(defaultValue = "10") int size,
                                @RequestParam(defaultValue = "createdAt") String orderBy,
@@ -53,6 +54,7 @@ public class GameController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public Game findById(@PathVariable UUID id) {
         return gameService.findById(id);
     }
@@ -108,6 +110,7 @@ public class GameController {
     }
 
     @PostMapping("/platforms")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public Page<Game> getGamesByPlatforms(@RequestBody @Validated PlatformDTO platforms,
                                           BindingResult validation,
                                           @RequestParam(defaultValue = "0") int page,
@@ -124,6 +127,7 @@ public class GameController {
         }
     }
     @GetMapping("/search")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public Page<Game> getGamesByTitle(@RequestParam String q,
                                           @RequestParam(defaultValue = "0") int page,
                                           @RequestParam(defaultValue = "5") int size,
@@ -134,15 +138,28 @@ public class GameController {
             }
             return gameService.findGamesByTitleStartsWith(page, size > 20 ? 5 : size, q, orderBy, direction);
         }
-    @GetMapping("/filter")
-    public Page<Game> filterGames(@RequestParam(defaultValue = "0") int page,
+    @GetMapping("/genres")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    public Page<Game> filterByGenres(@RequestParam(defaultValue = "0") int page,
                                @RequestParam(defaultValue = "10") int size,
                                @RequestParam(defaultValue = "createdAt") String orderBy,
-                               @RequestParam(defaultValue = "") String filter,
+                               @RequestParam(defaultValue = "") String genre,
                                @RequestParam(defaultValue = "desc")String direction) {
         if (!direction.equalsIgnoreCase("desc") && !direction.equalsIgnoreCase("asc")) {
             throw new IllegalArgumentException("The direction has to be 'asc' or 'desc'!");
         }
-        return gameService.filterGames(page, size > 20 ? 5 : size, orderBy, direction, filter);
+        return gameService.filterByGenres(page, size > 20 ? 5 : size, orderBy, direction, genre);
+    }
+    @GetMapping("/platforms")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    public Page<Game> filterByPlatforms(@RequestParam(defaultValue = "0") int page,
+                               @RequestParam(defaultValue = "10") int size,
+                               @RequestParam(defaultValue = "createdAt") String orderBy,
+                               @RequestParam(defaultValue = "") String platform,
+                               @RequestParam(defaultValue = "desc")String direction) {
+        if (!direction.equalsIgnoreCase("desc") && !direction.equalsIgnoreCase("asc")) {
+            throw new IllegalArgumentException("The direction has to be 'asc' or 'desc'!");
+        }
+        return gameService.filterByPlatforms(page, size > 20 ? 5 : size, orderBy, direction, platform);
     }
 }

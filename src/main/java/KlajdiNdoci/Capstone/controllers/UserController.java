@@ -26,6 +26,7 @@ public class UserController {
 
 
     @GetMapping("")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public Page<User> getUsers(@RequestParam(defaultValue = "0") int page,
                               @RequestParam(defaultValue = "10") int size,
                               @RequestParam(defaultValue = "createdAt") String orderBy,
@@ -38,6 +39,7 @@ public class UserController {
 
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public User findById(@PathVariable UUID id) {
         return userService.findUserById(id);
     }
@@ -61,11 +63,13 @@ public class UserController {
 
 
     @GetMapping("/me")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public UserDetails getProfile(@AuthenticationPrincipal UserDetails currentUser) {
         return currentUser;
     }
 
     @PutMapping("/me")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public UserDetails updateProfile(@AuthenticationPrincipal User currentUser, @RequestBody @Validated NewUserDTO body, BindingResult validation) {
         if (validation.hasErrors()) {
             throw new BadRequestException(validation.getAllErrors());
@@ -75,6 +79,7 @@ public class UserController {
     }
 
     @DeleteMapping("/me")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProfile(@AuthenticationPrincipal User currentUser) {
         userService.findByIdAndDelete(currentUser.getId());
@@ -91,6 +96,7 @@ public class UserController {
     }
 
     @PutMapping("/me/upload")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public UserDetails uploadOnProfile(@AuthenticationPrincipal User currentUser,  @RequestParam("avatar") MultipartFile body) throws IOException {
         try {
             return userService.uploadImg(body, currentUser.getId());

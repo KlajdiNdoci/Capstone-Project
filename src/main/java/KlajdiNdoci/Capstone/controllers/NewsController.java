@@ -26,6 +26,7 @@ public class NewsController {
     private NewsRepository newsRepository;
 
     @GetMapping("")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public Page<News> getNews(@RequestParam(defaultValue = "0") int page,
                               @RequestParam(defaultValue = "10") int size,
                               @RequestParam(defaultValue = "createdAt") String orderBy,

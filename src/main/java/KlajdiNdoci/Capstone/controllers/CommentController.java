@@ -26,6 +26,7 @@ public class CommentController {
 
 
     @GetMapping("")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public Page<Comment> getComments(@RequestParam(defaultValue = "0") int page,
                                      @RequestParam(defaultValue = "10") int size,
                                      @RequestParam(defaultValue = "createdAt") String orderBy,
@@ -38,7 +39,7 @@ public class CommentController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public Comment createComment(@RequestBody @Validated NewCommentDTO body, BindingResult validation, @AuthenticationPrincipal User currentUser) {
         if (validation.hasErrors()) {
             throw new BadRequestException(validation.getAllErrors());

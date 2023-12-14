@@ -19,4 +19,5 @@ public interface GameRepository extends JpaRepository<Game, UUID> {
     Page<Game> findByPlatformsIn(List<Platform> platforms, Pageable pageable);
     Page<Game> findByTitleStartsWithIgnoreCase(String q, Pageable pageable);
     Page<Game> findByGenres(GameGenre genre, Pageable pageable);
+    Page<Game> findByPlatforms(Platform platform, Pageable pageable);
 }

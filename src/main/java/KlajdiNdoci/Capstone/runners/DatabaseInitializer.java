@@ -38,7 +38,7 @@ public class DatabaseInitializer implements CommandLineRunner {
     private final Faker faker = new Faker(new Locale("en"));
     @Override
     public void run(String... args) throws Exception {
-        populateDatabase();
+//        populateDatabase();
     }
 
     private void populateDatabase() {
