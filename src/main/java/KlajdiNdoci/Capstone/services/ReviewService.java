@@ -67,7 +67,7 @@ public class ReviewService {
     public void findByIdAndDelete(UUID id) {
         Review found = findById(id);
         UUID gameId = found.getGame().getId();
-        found.getLikes().forEach(user -> user.getLikes().remove(found));
+        found.getLikes().forEach(user -> user.getReviewsLikes().remove(found));
         found.setLikes(null);
         reviewRepository.delete(found);
         gameService.updateGameAverageRating(gameId);
