@@ -105,4 +105,9 @@ public class ReviewService {
         return existingReview.isPresent();
     }
 
+    public Page<Review> findByUserId(UUID userId, int page, int size, String orderBy, String direction) {
+        Pageable pageable = PageRequest.of(page, size,  Sort.by(Sort.Direction.fromString(direction), orderBy));
+        return reviewRepository.findByUserId(userId,pageable);
+    }
+
 }

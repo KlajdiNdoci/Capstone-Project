@@ -15,4 +15,6 @@ public interface ReviewRepository extends JpaRepository<Review, UUID> {
     Page<Review> findByGameIdAndCreatedAtBetween(UUID gameId, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
 
     Optional<Review> findByUserIdAndGameId(UUID userId, UUID gameId);
+
+    Page<Review> findByUserId(UUID userId, Pageable pageable);
 }

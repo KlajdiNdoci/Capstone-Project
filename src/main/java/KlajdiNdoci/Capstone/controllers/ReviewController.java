@@ -115,4 +115,19 @@ public class ReviewController {
         return reviewService.likeReview(reviewId, currentUser.getId());
     }
 
+    @GetMapping("/user/{userId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    public Page<Review> getReviewsByUserId(
+            @PathVariable UUID userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String orderBy,
+            @RequestParam(defaultValue = "desc") String direction
+    ) {
+        if (!direction.equalsIgnoreCase("desc") && !direction.equalsIgnoreCase("asc")) {
+            throw new IllegalArgumentException("The direction has to be 'asc' or 'desc'!");
+        }
+        return reviewService.findByUserId(userId, page, size ,  orderBy, direction);
+    }
+
 }

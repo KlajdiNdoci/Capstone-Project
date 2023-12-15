@@ -33,11 +33,12 @@ public class Review {
     @Temporal(TemporalType.TIMESTAMP)
     protected LocalDateTime createdAt;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @JsonIgnore
+
     @ManyToOne
     @JoinColumn(name = "game_id")
     private Game game;
