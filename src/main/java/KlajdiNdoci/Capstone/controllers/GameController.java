@@ -173,6 +173,6 @@ public class GameController {
         if (!direction.equalsIgnoreCase("desc") && !direction.equalsIgnoreCase("asc")) {
             throw new IllegalArgumentException("The direction has to be 'asc' or 'desc'!");
         }
-        return gameService.findSavedGamesByUserId(page, size > 20 ? 5 : size, userId, orderBy, direction);
+        return gameService.findSavedGamesByUserId(page, size, userId, orderBy, direction);
     }
 }
