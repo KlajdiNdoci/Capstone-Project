@@ -4,6 +4,7 @@ import KlajdiNdoci.Capstone.entities.Comment;
 import KlajdiNdoci.Capstone.entities.Game;
 import KlajdiNdoci.Capstone.entities.Review;
 import KlajdiNdoci.Capstone.entities.User;
+import KlajdiNdoci.Capstone.exceptions.BadRequestException;
 import KlajdiNdoci.Capstone.exceptions.NotFoundException;
 import KlajdiNdoci.Capstone.payloads.NewNewsDTO;
 import KlajdiNdoci.Capstone.payloads.NewReviewDTO;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -32,6 +34,9 @@ public class ReviewService {
 
     public Review save(UUID reviewId, NewReviewDTO body, UUID userId) {
         Game found = gameService.findById(reviewId);
+        if (userHasReviewedGame(userId, found.getId())) {
+            throw new BadRequestException("User has already reviewed this game");
+        }
         Review newReview =Review.builder()
                 .content(body.content())
                 .user(userService.findUserById(userId))
@@ -94,6 +99,10 @@ public class ReviewService {
             review.getLikes().remove(user);
         }
         return reviewRepository.save(review);
+    }
+    private boolean userHasReviewedGame(UUID userId, UUID gameId) {
+        Optional<Review> existingReview = reviewRepository.findByUserIdAndGameId(userId, gameId);
+        return existingReview.isPresent();
     }
 
 }

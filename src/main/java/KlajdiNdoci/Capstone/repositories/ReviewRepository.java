@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, UUID> {
@@ -13,4 +14,5 @@ public interface ReviewRepository extends JpaRepository<Review, UUID> {
 
     Page<Review> findByGameIdAndCreatedAtBetween(UUID gameId, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
 
+    Optional<Review> findByUserIdAndGameId(UUID userId, UUID gameId);
 }
