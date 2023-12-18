@@ -114,4 +114,17 @@ public class UserController {
     public User addOrRemoveFriend(@PathVariable UUID friendId, @AuthenticationPrincipal User currentUser) {
         return userService.addOrRemoveFriend(friendId, currentUser.getId());
     }
+
+    @GetMapping("/{userId}/friends")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    public Page<User> getUserFriends(@PathVariable UUID userId,
+                                     @RequestParam(defaultValue = "0") int page,
+                                     @RequestParam(defaultValue = "10") int size,
+                                     @RequestParam(defaultValue = "createdAt") String orderBy,
+                                     @RequestParam(defaultValue = "desc") String direction) {
+        if (!direction.equalsIgnoreCase("desc") && !direction.equalsIgnoreCase("asc")) {
+            throw new IllegalArgumentException("The direction has to be 'asc' or 'desc'!");
+        }
+        return userService.getUserFriends(userId, page, size > 20 ? 5 : size, orderBy, direction);
+    }
 }

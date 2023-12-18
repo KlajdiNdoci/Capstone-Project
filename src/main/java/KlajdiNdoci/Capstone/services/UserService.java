@@ -100,8 +100,8 @@ public class UserService {
         return userRepository.save(currentUser);
     }
 
-    public Page<User> getUserFriends(UUID userId,int page, int size, String orderBy, String direction) {
-        Pageable pageable = PageRequest.of(page, size,  Sort.by(Sort.Direction.fromString(direction), orderBy));
+    public Page<User> getUserFriends(UUID userId ,int page, int size, String orderBy, String direction) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), orderBy));
         return userRepository.findFriendsById(userId, pageable);
     }
 }
