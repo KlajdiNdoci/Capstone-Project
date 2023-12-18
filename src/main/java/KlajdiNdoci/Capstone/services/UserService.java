@@ -104,4 +104,8 @@ public class UserService {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), orderBy));
         return userRepository.findFriendsById(userId, pageable);
     }
+    public Page<Game> getUserSavedGames(UUID userId ,int page, int size, String orderBy, String direction) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), orderBy));
+        return userRepository.findSavedGamesById(userId, pageable);
+    }
 }

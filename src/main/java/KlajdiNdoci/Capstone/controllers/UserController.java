@@ -1,5 +1,6 @@
 package KlajdiNdoci.Capstone.controllers;
 
+import KlajdiNdoci.Capstone.entities.Game;
 import KlajdiNdoci.Capstone.entities.User;
 import KlajdiNdoci.Capstone.exceptions.BadRequestException;
 import KlajdiNdoci.Capstone.payloads.NewUserDTO;
@@ -126,5 +127,18 @@ public class UserController {
             throw new IllegalArgumentException("The direction has to be 'asc' or 'desc'!");
         }
         return userService.getUserFriends(userId, page, size, orderBy, direction);
+    }
+
+    @GetMapping("/{userId}/games")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    public Page<Game> getUserSavedGames(@PathVariable UUID userId,
+                                        @RequestParam(defaultValue = "0") int page,
+                                        @RequestParam(defaultValue = "10") int size,
+                                        @RequestParam(defaultValue = "createdAt") String orderBy,
+                                        @RequestParam(defaultValue = "desc") String direction) {
+        if (!direction.equalsIgnoreCase("desc") && !direction.equalsIgnoreCase("asc")) {
+            throw new IllegalArgumentException("The direction has to be 'asc' or 'desc'!");
+        }
+        return userService.getUserSavedGames(userId, page, size, orderBy, direction);
     }
 }
