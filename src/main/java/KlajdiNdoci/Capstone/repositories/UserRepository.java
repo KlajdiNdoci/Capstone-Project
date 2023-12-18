@@ -15,4 +15,5 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByEmailIgnoreCase(String email);
     Optional<User> findByUsername(String username);
     Page<Game> findSavedGamesById(UUID userId, Pageable pageable);
+    Page<User> findFriendsById(UUID userId, Pageable pageable);
 }

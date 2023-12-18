@@ -70,12 +70,8 @@ public class ReviewService {
     }
 
     public void findByIdAndDelete(UUID id) {
-        Review found = findById(id);
-        UUID gameId = found.getGame().getId();
-        found.getLikes().forEach(user -> user.getReviewsLikes().remove(found));
-        found.setLikes(null);
-        reviewRepository.delete(found);
-        gameService.updateGameAverageRating(gameId);
+            Review found = findById(id);
+            reviewRepository.delete(found);
     }
 
     public Page<Review> findReviewsByGameId(int page, int size, UUID id, String orderBy, String direction) {

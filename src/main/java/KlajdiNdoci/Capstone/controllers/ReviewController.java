@@ -91,7 +91,7 @@ public class ReviewController {
         if (!direction.equalsIgnoreCase("desc") && !direction.equalsIgnoreCase("asc")) {
             throw new IllegalArgumentException("The direction has to be 'asc' or 'desc'!");
         }
-        return reviewService.findReviewsByGameId(page, size > 20 ? 5 : size, gameId, orderBy, direction);
+        return reviewService.findReviewsByGameId(page, size, gameId, orderBy, direction);
     }
     @GetMapping("/game/{gameId}/{minusDays}")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
@@ -106,7 +106,7 @@ public class ReviewController {
         if (!direction.equalsIgnoreCase("desc") && !direction.equalsIgnoreCase("asc")) {
             throw new IllegalArgumentException("The direction has to be 'asc' or 'desc'!");
         }
-        return reviewService.findReviewsByGameIdAndDate(page, size > 20 ? 5 : size, gameId, orderBy, direction, minusDays);
+        return reviewService.findReviewsByGameIdAndDate(page, size , gameId, orderBy, direction, minusDays);
     }
 
     @PostMapping("/{reviewId}/likes")
