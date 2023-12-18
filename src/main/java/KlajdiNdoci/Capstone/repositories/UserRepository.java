@@ -15,8 +15,6 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByEmailIgnoreCase(String email);
     Optional<User> findByUsername(String username);
-    @Query("SELECT u.savedGames FROM User u WHERE u.id = :userId")
-    Page<Game> findSavedGamesById(UUID userId, Pageable pageable);
     @Query("SELECT u.friends FROM User u WHERE u.id = :userId")
     Page<User> findFriendsById(UUID userId, Pageable pageable);
 }

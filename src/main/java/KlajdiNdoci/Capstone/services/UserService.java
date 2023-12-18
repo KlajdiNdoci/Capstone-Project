@@ -94,8 +94,13 @@ public class UserService {
 
         if (!currentUser.getFriends().contains(friend)) {
             currentUser.getFriends().add(friend);
+        }
+
+        if (!friend.getFriends().contains(currentUser)) {
+            friend.getFriends().add(currentUser);
         } else {
             currentUser.getFriends().remove(friend);
+            friend.getFriends().remove(currentUser);
         }
         return userRepository.save(currentUser);
     }
@@ -103,9 +108,5 @@ public class UserService {
     public Page<User> getUserFriends(UUID userId ,int page, int size, String orderBy, String direction) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), orderBy));
         return userRepository.findFriendsById(userId, pageable);
-    }
-    public Page<Game> getUserSavedGames(UUID userId ,int page, int size, String orderBy, String direction) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), orderBy));
-        return userRepository.findSavedGamesById(userId, pageable);
     }
 }
