@@ -37,14 +37,14 @@ public class CommentController {
         return commentService.getComments(page, size > 20 ? 5 : size, orderBy, direction);
     }
 
-    @PostMapping("")
+    @PostMapping("/{newsId}")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    public Comment createComment(@RequestBody @Validated NewCommentDTO body, BindingResult validation, @AuthenticationPrincipal User currentUser) {
+    public Comment createComment(@PathVariable UUID newsId, @RequestBody @Validated NewCommentDTO body, BindingResult validation, @AuthenticationPrincipal User currentUser) {
         if (validation.hasErrors()) {
             throw new BadRequestException(validation.getAllErrors());
         } else {
-            return commentService.save(body, currentUser.getId());
+            return commentService.save(body, currentUser.getId(), newsId);
         }
     }
 

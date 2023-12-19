@@ -25,11 +25,11 @@ public class CommentService {
     @Autowired
     private CommentRepository commentRepository;
 
-    public Comment save(NewCommentDTO body,UUID userId) {
+    public Comment save(NewCommentDTO body,UUID userId, UUID newsId) {
         Comment newComment =Comment.builder()
                 .content(body.content())
                 .user(userService.findUserById(userId))
-                .news(newsService.findById(body.newsId()))
+                .news(newsService.findById(newsId))
                 .build();
         return commentRepository.save(newComment);
     }

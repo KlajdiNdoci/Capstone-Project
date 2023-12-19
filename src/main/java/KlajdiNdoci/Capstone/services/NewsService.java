@@ -31,7 +31,6 @@ public class NewsService {
                 .title(body.title())
                 .creator(userService.findUserById(userId))
                 .game(foundGame)
-                .image(foundGame.getGameCover())
                 .build();
         return newsRepository.save(newNews);
     }

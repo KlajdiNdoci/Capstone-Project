@@ -20,7 +20,6 @@ public class News {
     @Setter(AccessLevel.NONE)
     private UUID id;
     private String title;
-    private String image;
 
     @ManyToOne
     @JoinColumn(name = "creator_id")
