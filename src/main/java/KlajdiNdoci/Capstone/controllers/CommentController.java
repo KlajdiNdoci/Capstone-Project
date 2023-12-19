@@ -79,5 +79,18 @@ public class CommentController {
             throw new UnauthorizedException("Access Denied");
         }
     }
+
+    @GetMapping("/users/{userId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    public Page<Comment> getComments(@PathVariable UUID userId,
+                                     @RequestParam(defaultValue = "0") int page,
+                                     @RequestParam(defaultValue = "10") int size,
+                                     @RequestParam(defaultValue = "createdAt") String orderBy,
+                                     @RequestParam(defaultValue = "desc") String direction) {
+        if (!direction.equalsIgnoreCase("desc") && !direction.equalsIgnoreCase("asc")) {
+            throw new IllegalArgumentException("The direction has to be 'asc' or 'desc'!");
+        }
+        return commentService.getUserComments(page,size, orderBy, direction, userId);
+    }
 }
 

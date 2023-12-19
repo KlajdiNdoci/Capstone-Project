@@ -1,6 +1,7 @@
 package KlajdiNdoci.Capstone.services;
 
 import KlajdiNdoci.Capstone.entities.Comment;
+import KlajdiNdoci.Capstone.entities.User;
 import KlajdiNdoci.Capstone.exceptions.NotFoundException;
 import KlajdiNdoci.Capstone.payloads.NewCommentDTO;
 import KlajdiNdoci.Capstone.payloads.NewNewsDTO;
@@ -52,5 +53,11 @@ public class CommentService {
     public void findByIdAndDelete(UUID id) {
         Comment found = commentRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
         commentRepository.delete(found);
+    }
+
+    public Page<Comment> getUserComments(int page, int size, String orderBy, String direction, UUID userId) {
+        User user = userService.findUserById(userId);
+        Pageable pageable = PageRequest.of(page, size,Sort.by(Sort.Direction.fromString(direction), orderBy));
+        return commentRepository.findByUser(user, pageable);
     }
 }
