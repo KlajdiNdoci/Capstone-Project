@@ -4,7 +4,6 @@ import KlajdiNdoci.Capstone.entities.Comment;
 import KlajdiNdoci.Capstone.entities.User;
 import KlajdiNdoci.Capstone.exceptions.NotFoundException;
 import KlajdiNdoci.Capstone.payloads.NewCommentDTO;
-import KlajdiNdoci.Capstone.payloads.NewNewsDTO;
 import KlajdiNdoci.Capstone.payloads.UpdateCommentDTO;
 import KlajdiNdoci.Capstone.repositories.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,5 +58,17 @@ public class CommentService {
         User user = userService.findUserById(userId);
         Pageable pageable = PageRequest.of(page, size,Sort.by(Sort.Direction.fromString(direction), orderBy));
         return commentRepository.findByUser(user, pageable);
+    }
+
+    public Comment likeComment(UUID commentId, UUID userId) {
+        Comment comment = findById(commentId);
+        User user = userService.findUserById(userId);
+
+        if (!comment.getLikes().contains(user)) {
+            comment.getLikes().add(user);
+        } else {
+            comment.getLikes().remove(user);
+        }
+        return commentRepository.save(comment);
     }
 }

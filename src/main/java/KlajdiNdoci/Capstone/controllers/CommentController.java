@@ -92,5 +92,11 @@ public class CommentController {
         }
         return commentService.getUserComments(page,size, orderBy, direction, userId);
     }
+
+    @PostMapping("/{commentId}/likes")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    public Comment likeComment(@PathVariable UUID commentId, @AuthenticationPrincipal User currentUser) {
+        return commentService.likeComment(commentId, currentUser.getId());
+    }
 }
 

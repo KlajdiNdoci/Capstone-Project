@@ -5,6 +5,7 @@ import KlajdiNdoci.Capstone.entities.Review;
 import KlajdiNdoci.Capstone.entities.User;
 import KlajdiNdoci.Capstone.exceptions.NotFoundException;
 import KlajdiNdoci.Capstone.payloads.NewUserDTO;
+import KlajdiNdoci.Capstone.payloads.UpdateUserDTO;
 import KlajdiNdoci.Capstone.repositories.GameRepository;
 import KlajdiNdoci.Capstone.repositories.UserRepository;
 import com.cloudinary.Cloudinary;
@@ -45,7 +46,7 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
-    public User findByIdAndUpdate(UUID id, NewUserDTO u) throws NotFoundException {
+    public User findByIdAndUpdate(UUID id, UpdateUserDTO u) throws NotFoundException {
         User foundUser = this.findUserById(id);
         foundUser.setUsername(u.username());
         foundUser.setName(u.name());

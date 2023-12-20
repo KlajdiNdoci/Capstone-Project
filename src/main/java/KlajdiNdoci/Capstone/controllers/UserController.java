@@ -4,6 +4,7 @@ import KlajdiNdoci.Capstone.entities.Game;
 import KlajdiNdoci.Capstone.entities.User;
 import KlajdiNdoci.Capstone.exceptions.BadRequestException;
 import KlajdiNdoci.Capstone.payloads.NewUserDTO;
+import KlajdiNdoci.Capstone.payloads.UpdateUserDTO;
 import KlajdiNdoci.Capstone.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -54,7 +55,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public User findByIdAndUpdate(@PathVariable UUID id, @RequestBody @Validated NewUserDTO body, BindingResult validation) {
+    public User findByIdAndUpdate(@PathVariable UUID id, @RequestBody @Validated UpdateUserDTO body, BindingResult validation) {
         if (validation.hasErrors()) {
             throw new BadRequestException(validation.getAllErrors());
         } else {
@@ -71,7 +72,7 @@ public class UserController {
 
     @PutMapping("/me")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    public UserDetails updateProfile(@AuthenticationPrincipal User currentUser, @RequestBody @Validated NewUserDTO body, BindingResult validation) {
+    public UserDetails updateProfile(@AuthenticationPrincipal User currentUser, @RequestBody @Validated UpdateUserDTO body, BindingResult validation) {
         if (validation.hasErrors()) {
             throw new BadRequestException(validation.getAllErrors());
         } else {
