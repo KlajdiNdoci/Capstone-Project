@@ -52,7 +52,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("https://65830e1eb8d6352cddd201d7--moonlit-treacle-8399d5.netlify.app"));
+        config.setAllowedOrigins(List.of("https://659bcc2202b53d3838980c3f--remarkable-wisp-e5e85a.netlify.app"));
         config.setAllowedMethods(List.of("*"));
         config.setAllowedHeaders(List.of("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
