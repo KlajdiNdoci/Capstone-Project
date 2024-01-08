@@ -18,5 +18,6 @@ public enum GameGenre {
     SPACE,
     TOWERDEFENSE,
     CARDGAME,
-    SPORT
+    SPORT,
+    HORROR
 }
