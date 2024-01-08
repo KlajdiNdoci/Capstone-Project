@@ -123,6 +123,8 @@ public class GameService {
         found.setTitle(body.title());
         found.setDescription(body.description());
         found.setReleaseDate(body.releaseDate());
+        found.setDeveloper(body.developer());
+        found.setPublisher(body.publisher());
 
         List<GameGenre> updatedGenres = new ArrayList<>();
         for (String genreName : body.genres()) {
